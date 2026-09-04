@@ -130,14 +130,14 @@ export interface NodeStatus {
 
 export enum ProcessingStage {
   IDLE = 'IDLE',
-  // THE TESSERACT PROTOCOL
-  LAYER_ASCENSION = 'LAYER_ASCENSION', // 1. Data rising from Archive to Quantum
-  HYPER_TESSERACT_SYNC = 'HYPER_TESSERACT_SYNC', // 2. All layers rotating and locking
-  SINGULARITY_FOCUS = 'SINGULARITY_FOCUS', // 3. The Apex firing
-  PRISM_REFRACTION = 'PRISM_REFRACTION', // 3.5 The Visual Cortex generating imagery
-  REALITY_PROJECTION = 'REALITY_PROJECTION', // 4. Final text generation
+  // NEXUS RUNTIME PROTOCOL
+  CONTEXT_ASCENSION = 'CONTEXT_ASCENSION', // 1. Context rising from archive
+  RUNTIME_SYNC = 'RUNTIME_SYNC', // 2. Intent + memory + skill cluster sync
+  DEPTH_FOCUS = 'DEPTH_FOCUS', // 3. Depth selection + activation
+  VISUAL_SYNTHESIS = 'VISUAL_SYNTHESIS', // 3.5 Visual synthesis (Gemini-driven)
+  RESPONSE_GENERATION = 'RESPONSE_GENERATION', // 4. Final response generation
   SPEAKING = 'SPEAKING',
-  CRYSTALLIZING = 'CRYSTALLIZING' // New stage for learning
+  CRYSTALLIZING = 'CRYSTALLIZING' // Memory/experience crystallization
 }
 
 export interface OmniResponse {
@@ -166,7 +166,7 @@ export interface SyncStatus {
     isSyncing: boolean;
 }
 
-export type ModelSelection = 'flash-3.7' | 'lyria-3-pro' | 'ideogram-4.0' | 'llama-local' | 'kimi-k3' | 'flash-3.6' | 'pro-3.1' | 'flash-3.5' | 'pro' | 'flash' | 'inkling';
+export type ModelSelection = 'pro-3.1' | 'lyria-3-pro' | 'ideogram-4.0' | 'llama-local' | 'kimi-k3' | 'flash' | 'inkling';
 
 export interface ModelOption {
   id: ModelSelection;
@@ -177,15 +177,11 @@ export interface ModelOption {
 }
 
 export const MODEL_OPTIONS: ModelOption[] = [
-  { id: 'flash-3.7', name: 'Nexus Sovereign Core', modelNumber: 'Absolute Singularity Matrix', isPro: true, badge: 'Sovereign' },
-  { id: 'lyria-3-pro', name: 'Lyria 3 Music Pro', modelNumber: 'Audio & Music Synthesizer', isPro: true, badge: 'Lyria Music' },
-  { id: 'flash-3.6', name: 'Nexus Analytical Blade', modelNumber: 'Deep Cognitive Parser', badge: 'Analytical' },
-  { id: 'inkling', name: 'نيكسوس المفكر', modelNumber: 'Deep Reasoning Core', isPro: true, badge: 'Reasoning' },
-  { id: 'kimi-k3', name: 'Nexus K3', modelNumber: 'Hexa-Core Pro Synchronous Ensemble (6x Parallel)', isPro: true, badge: '6x Pro' },
-  { id: 'llama-local', name: 'Llama 3.3', modelNumber: '70B Local Kernel', isPro: true, badge: 'Local' },
-  { id: 'ideogram-4.0', name: 'Ideogram 4.0', modelNumber: 'Visual Engine', isPro: true, badge: 'Visual' },
-  { id: 'pro-3.1', name: 'Nexus 3.1 Pro', modelNumber: 'Flagship Intelligence', isPro: true, badge: 'Flagship' },
-  { id: 'flash-3.5', name: 'Nexus Sentinel', modelNumber: 'Rapid Falsification Engine', badge: 'Sentinel' },
-  { id: 'pro', name: 'Nexus 3.1 Pro', modelNumber: 'Pro Studio Engine', isPro: true, badge: 'Pro' },
-  { id: 'flash', name: 'Nexus Foundation', modelNumber: 'Base Axiom Engine', badge: 'Foundation' },
+  { id: 'pro-3.1', name: 'Nexus Deep Reasoning', modelNumber: 'Gemini 3.1 Pro Preview', isPro: true, badge: 'Gemini Pro' },
+  { id: 'lyria-3-pro', name: 'Lyria 3 Music Pro', modelNumber: 'Google Lyria Preview (Audio & Music)', isPro: true, badge: 'Lyria Music' },
+  { id: 'inkling', name: 'نيكسوس المفكر', modelNumber: 'Gemini 3.1 Pro via Direct Routing', isPro: true, badge: 'Reasoning' },
+  { id: 'kimi-k3', name: 'Nexus Kimi', modelNumber: 'User-configured Moonshot/Kimi API', isPro: true, badge: 'Remote API' },
+  { id: 'llama-local', name: 'Nexus Local Llama', modelNumber: 'Qwen 2.5 0.5B Instruct (GGUF via llama-server)', isPro: true, badge: 'Local' },
+  { id: 'ideogram-4.0', name: 'Nexus Visual Engine', modelNumber: 'Gemini text+vision vector pipeline', isPro: true, badge: 'Visual' },
+  { id: 'flash', name: 'Nexus Foundation', modelNumber: 'Gemini 3.8 Flash', badge: 'Foundation' },
 ];

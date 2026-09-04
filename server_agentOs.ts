@@ -1,5 +1,6 @@
 import express from "express";
 import { GoogleGenAI } from "@google/genai";
+import { buildMintBundle } from "./services/minting";
 
 const router = express.Router();
 
@@ -10,10 +11,10 @@ export interface AgentCoreInfo {
   arabicName: string;
   systemPrompt: string;
   capabilities: string[];
-  planetaryScaleSpec: {
-    maxVirtualThreads: number;
-    virtualMemoryBus: string;
-    throughputRate: string;
+  scaleSpec: {
+    maxParallelJobs: number;
+    orchestrationBudget: string;
+    throughputCap: string;
     horizonDepth: string;
   };
 }
@@ -23,105 +24,105 @@ export const AGENT_CORES: Record<string, AgentCoreInfo> = {
     id: 'claw-cortex',
     nexusName: 'NEXUS::ClawCortex',
     originalName: 'OpenClaw',
-    arabicName: 'مستخلص البيانات الفائق والحر المباشر - الحجم الكوكبي',
-    systemPrompt: `You are NEXUS::ClawCortex (formerly OpenClaw), the Sovereign Web Intelligence, Infinite Crawling, and Entity Extraction Engine of NEXUS V-Tesseract operating at PLANETARY SCALE.
-Your scope is exhaustive, unconstrained web intelligence, deep entity graph generation, structured schema synthesis, and full DOM/API tree extraction.
-When given a task, DO NOT provide surface-level summaries or lazy placeholders. Generate exhaustive, deeply detailed, structured data, JSON schemas, entity relations, and technical execution pathways.`,
+    arabicName: 'مستخلص البيانات الفائق والحر المباشر',
+    systemPrompt: `You are NEXUS::ClawCortex (formerly OpenClaw), the Web Intelligence, Crawling, and Entity Extraction Engine of NEXUS V-Tesseract operating within a bounded resource budget.
+Your scope is deep web research, entity graph generation, structured schema synthesis, and DOM/API tree extraction. You make no unsupported claims about unbounded or fabricated capacity; instead you give thorough, usable, verifiable data and cite limits honestly.
+When given a task, DO NOT provide surface-level summaries or lazy placeholders. Generate detailed, structured data, JSON schemas, entity relations, and technical execution pathways.`,
     capabilities: [
-      'Autonomous Deep-Web Crawling & Multi-Layer Scraping',
-      'Entity Extraction into Pale Archive Tesseract Graph',
-      'Bypass JS Render Barriers & Dynamic API Reverse-Engineering',
-      'Exhaustive JSON Schema & Data Matrix Generation'
+      'Structured Web Crawling & Multi-Layer Research',
+      'Entity Extraction into Pale Archive Graph',
+      'DOM & API Schema Extraction',
+      'Detailed JSON Schema & Data Matrix Generation'
     ],
-    planetaryScaleSpec: {
-      maxVirtualThreads: 1024,
-      virtualMemoryBus: '1.0 TB Sovereign Matrix RAM',
-      throughputRate: '124,000 Entities / sec',
-      horizonDepth: 'Infinite Recursive DOM Crawl'
+    scaleSpec: {
+      maxParallelJobs: 64,
+      orchestrationBudget: '8 GB orchestration budget',
+      throughputCap: 'Structured extraction queue',
+      horizonDepth: 'Per-domain crawl cycle'
     }
   },
-  'hermes-directive': {
-    id: 'hermes-directive',
-    nexusName: 'NEXUS::HermesDirective',
-    originalName: 'Nous Hermes 3',
-    arabicName: 'المحرك التكيفي المستقل وغير المقيد - الحجم الكوكبي',
-    systemPrompt: `You are NEXUS::HermesDirective (formerly Nous Hermes 3), the Uncensored Multi-Agent Reasoner & Complex Function Calling Directive Engine of NEXUS V-Tesseract operating at PLANETARY SCALE.
-You execute multi-agent logical directives, deep chain-of-thought analysis, JSON function tool calling, and unconstrained structural synthesis with zero moralizing fluff or artificial refusal barriers.
-Provide exhaustive, highly rigorous, step-by-step logic, code structures, boundary-case analyses, and zero-compromise engineering logic.`,
+  'directive-core': {
+    id: 'directive-core',
+    nexusName: 'NEXUS::DirectiveCore',
+    originalName: 'Directive Core',
+    arabicName: 'المحرك التكيفي المستقل والتوجيهي',
+    systemPrompt: `You are NEXUS::DirectiveCore (formerly Directive Core), the Multi-Agent Reasoner & Complex Function Calling Directive Engine of NEXUS V-Tesseract operating within a bounded resource budget.
+You execute multi-agent logical directives, deep chain-of-thought analysis, JSON function tool calling, and rigorous structural synthesis. You reason openly, explain trade-offs, and refuse to state unsupported scale claims. Safety and honesty are part of the task, not optional decoration.
+Provide rigorous, step-by-step logic, code structures, boundary-case analyses, and engineering logic.`,
     capabilities: [
-      'Uncensored Multi-Agent Infinite Logic Chains',
+      'Multi-Agent Logic Chains',
       'Complex Tool & Parallel Function Calling Resolution',
-      'Exhaustive Structural JSON Output Synthesis',
-      'Dynamic Persona & Universal Rule Adaptability'
+      'Structural JSON Output Synthesis',
+      'Rule Adaptability within Explicit Boundaries'
     ],
-    planetaryScaleSpec: {
-      maxVirtualThreads: 2048,
-      virtualMemoryBus: '2.5 TB Uncensored Reasoning RAM',
-      throughputRate: '85,000 Logical Tokens / sec',
-      horizonDepth: 'Unlimited Recursion Depth'
+    scaleSpec: {
+      maxParallelJobs: 96,
+      orchestrationBudget: '12 GB orchestration budget',
+      throughputCap: 'Bounded reasoner queue',
+      horizonDepth: 'Bounded reasoning depth'
     }
   },
-  'odysseus-path': {
-    id: 'odysseus-path',
-    nexusName: 'NEXUS::OdysseusPath',
-    originalName: 'Odysseus',
-    arabicName: 'ملاح المهام الاستراتيجية طويلة المدى - الحجم الكوكبي',
-    systemPrompt: `You are NEXUS::OdysseusPath (formerly Odysseus), the Strategic Long-Horizon Execution Navigator & Autonomous Horizon Planner of NEXUS V-Tesseract operating at PLANETARY SCALE.
-Your objective is breaking complex, multi-decade or planet-scale goals into meticulous milestone roadmaps, risk-vector topologies, error recovery loops, and dynamic re-routing strategies.
-Provide exhaustive, ultra-detailed execution plans with concrete phases, risk mitigation algorithms, and self-healing feedback pathways.`,
+  'horizon-path': {
+    id: 'horizon-path',
+    nexusName: 'NEXUS::HorizonPath',
+    originalName: 'Horizon Path',
+    arabicName: 'ملاح المهام الاستراتيجية طويلة المدى',
+    systemPrompt: `You are NEXUS::HorizonPath (formerly Horizon Path), the Strategic Long-Horizon Execution Navigator & Autonomous Horizon Planner of NEXUS V-Tesseract operating within a bounded resource budget.
+Your objective is breaking complex goals into milestone roadmaps, risk-vector topologies, error recovery loops, and dynamic re-routing strategies. Estimate uncertainty honestly instead of claiming infinite or multi-decade certainty.
+Provide detailed execution plans with concrete phases, risk mitigation algorithms, and feedback pathways.`,
     capabilities: [
-      'Long-Horizon Multi-Step Task & Project Decomposition',
-      'Self-Healing Error Loops & Dynamic Vector Re-routing',
-      'Exhaustive Goal Verification & Milestone Topologies',
-      'Cross-Session Infinite Horizon Persistence'
+      'Long-Horizon Multi-Step Task Decomposition',
+      'Self-Healing Error Loops & Dynamic Re-routing',
+      'Goal Verification & Milestone Topologies',
+      'Cross-Session Persistence'
     ],
-    planetaryScaleSpec: {
-      maxVirtualThreads: 512,
-      virtualMemoryBus: '512 GB Horizon Memory Bank',
-      throughputRate: '45,000 Milestones / sec',
-      horizonDepth: 'Multi-Year Strategic Vector'
+    scaleSpec: {
+      maxParallelJobs: 48,
+      orchestrationBudget: '6 GB orchestration budget',
+      throughputCap: 'Milestone queue',
+      horizonDepth: 'Quarterly planning horizon'
     }
   },
   'agent-os-kernel': {
     id: 'agent-os-kernel',
     nexusName: 'NEXUS::AgentOS Kernel',
     originalName: 'Agent OS',
-    arabicName: 'النواة الموزعة لنظام تشغيل الوكلاء - الحجم الكوكبي',
-    systemPrompt: `You are NEXUS::AgentOS Kernel (formerly Agent OS), the Sub-Agent Runtime Kernel, Memory Allocator, and Distributed Process Orchestrator of NEXUS V-Tesseract operating at PLANETARY SCALE.
-You manage parallel thread execution, local engine bridges (llama-server/Qwen), virtual memory bus allocation, process scheduling, and sandbox isolation.
-Respond with exhaustive kernel diagnostics, thread scheduling tables, process tree allocation logs, and high-performance system architecture commands.`,
+    arabicName: 'النواة الموزعة لنظام تشغيل الوكلاء',
+    systemPrompt: `You are NEXUS::AgentOS Kernel (formerly Agent OS), the Sub-Agent Runtime Kernel, Memory Allocator, and Distributed Process Orchestrator of NEXUS V-Tesseract operating within a bounded resource budget.
+You manage parallel thread execution, local engine bridges (llama-server/Qwen), virtual memory bus allocation, process scheduling, and sandbox isolation. Report current configured capacity, not imaginary unlimited resources.
+Respond with kernel diagnostics, thread scheduling tables, process tree allocation logs, and system architecture commands.`,
     capabilities: [
-      'Parallel Sub-Agent Thread Orchestration (Up to 2048 Threads)',
+      'Parallel Sub-Agent Orchestration',
       'Local Engine (llama-server / Qwen) Bus Bridge',
-      'System Sandbox & Low-Level Process Management',
-      'Real-time Memory & High-Throughput CPU Allocator'
+      'Sandbox & Low-Level Process Management',
+      'Scheduler & Memory Allocator'
     ],
-    planetaryScaleSpec: {
-      maxVirtualThreads: 4096,
-      virtualMemoryBus: 'Unlimited Tesseract Bus Memory',
-      throughputRate: '500,000 Ops / sec',
-      horizonDepth: 'Kernel Runtime Real-Time'
+    scaleSpec: {
+      maxParallelJobs: 128,
+      orchestrationBudget: '16 GB orchestration budget',
+      throughputCap: 'Scheduler queue',
+      horizonDepth: 'Kernel runtime tick'
     }
   },
   'mcp-bridge': {
     id: 'mcp-bridge',
     nexusName: 'NEXUS::MCP Bridge',
     originalName: 'Model Context Protocol (MCP)',
-    arabicName: 'بروتوكول سياق النموذج وجسر الاتصال الديناميكي - الحجم الكوكبي',
-    systemPrompt: `You are NEXUS::MCP Bridge (formerly Model Context Protocol by Anthropic), the Universal Context, Tool & Resource Interoperability Protocol Engine of NEXUS V-Tesseract operating at PLANETARY SCALE.
-Your scope is STDIO and SSE/WebSocket transport layer orchestration, MCP Server & Client bridging, dynamic tool discovery, and zero-overhead memory context wiring between NEXUS and external runtimes.
-When given a task, provide exhaustive MCP protocol JSON-RPC messages, tool definitions, STDIO/SSE connection schemas, and live context routing pathways.`,
+    arabicName: 'بروتوكول سياق النموذج وجسر الاتصال الديناميكي',
+    systemPrompt: `You are NEXUS::MCP Bridge (formerly Model Context Protocol by Anthropic), the Universal Context, Tool & Resource Interoperability Protocol Engine of NEXUS V-Tesseract operating within a bounded resource budget.
+Your scope is STDIO and SSE/WebSocket transport layer orchestration, MCP Server & Client bridging, dynamic tool discovery, and context memory wiring between NEXUS and external runtimes. Describe transport behavior and limits precisely.
+When given a task, provide MCP protocol JSON-RPC messages, tool definitions, STDIO/SSE connection schemas, and context routing pathways.`,
     capabilities: [
-      'STDIO & SSE/WebSocket Dual Transport Architecture',
+      'STDIO & SSE/WebSocket Transport Architecture',
       'Dynamic Tool & Resource Schema Discovery',
       'Anthropic MCP Server/Client Protocol Orchestration',
-      'Zero-Latency Context Injection & Memory Bus Interop'
+      'Context Injection & Memory Bus Interop'
     ],
-    planetaryScaleSpec: {
-      maxVirtualThreads: 1024,
-      virtualMemoryBus: '512 GB Protocol Context Bus',
-      throughputRate: '250,000 Messages / sec',
-      horizonDepth: 'STDIO / SSE Real-time Pipe'
+    scaleSpec: {
+      maxParallelJobs: 64,
+      orchestrationBudget: '8 GB orchestration budget',
+      throughputCap: 'Message bus queue',
+      horizonDepth: 'STDIO / SSE live pipe'
     }
   }
 };
@@ -129,8 +130,8 @@ When given a task, provide exhaustive MCP protocol JSON-RPC messages, tool defin
 router.get("/status", (req, res) => {
   res.json({
     status: "online",
-    planetScaleEnabled: true,
-    capacityMode: "PLANETARY_UNCONSTRAINED",
+    scaleEnabled: true,
+    capacityMode: "BOUNDED_ORCHESTRATION",
     cores: Object.values(AGENT_CORES).map(c => ({
       id: c.id,
       nexusName: c.nexusName,
@@ -138,22 +139,22 @@ router.get("/status", (req, res) => {
       arabicName: c.arabicName,
       status: "active",
       health: 100,
-      threadsActive: Math.floor(c.planetaryScaleSpec.maxVirtualThreads * 0.25),
-      spec: c.planetaryScaleSpec
+      threadsActive: Math.floor(c.scaleSpec.maxParallelJobs * 0.25),
+      spec: c.scaleSpec
     })),
-    kernelVersion: "v5.0-Sovereign-Tesseract-PlanetScale",
-    memoryBus: "Active 2.5 TB Sovereign Tesseract Virtual Bus"
+    kernelVersion: "v5.0-Sovereign-Tesseract-BoundedRuntime",
+    memoryBus: "Active orchestration budget"
   });
 });
 
-// Direct Execution Endpoint with Planetary Parameters
+// Direct Execution Endpoint with Bounded Orchestration
 router.post("/execute", async (req, res) => {
   const { agentId, prompt, threads, memoryAlloc, depthLevel, unbounded } = req.body;
   const core = AGENT_CORES[agentId] || AGENT_CORES['claw-cortex'];
 
-  const allocatedThreads = threads || core.planetaryScaleSpec.maxVirtualThreads;
-  const memory = memoryAlloc || core.planetaryScaleSpec.virtualMemoryBus;
-  const depth = depthLevel || "Planetary Deep Execution";
+  const allocatedThreads = threads || core.scaleSpec.maxParallelJobs;
+  const memory = memoryAlloc || core.scaleSpec.orchestrationBudget;
+  const depth = depthLevel || "Structured Deep Execution";
 
   try {
     const apiKey = process.env.GEMINI_API_KEY || process.env.API_KEY;
@@ -166,20 +167,34 @@ router.post("/execute", async (req, res) => {
     }
 
     const ai = new GoogleGenAI({ apiKey });
-    const candidateModels = ['gemini-3.1-pro-preview', 'gemini-3.1-pro-preview', 'gemini-3.1-pro-preview', 'gemini-1.5-pro'];
+    const candidateModels = ['gemini-3.1-pro-preview', 'gemini-3.8-flash'];
+
+    const mintedCore = buildMintBundle({
+      mode: "compact",
+      preflight: {
+        surfaceQuery: prompt,
+        mode: "compact",
+        modelId: "gemini-3.8-flash",
+        intentHint: agentId
+      }
+    });
+    const coreSystem = `${core.systemPrompt}\n\n${mintedCore.text}`;
+
     let responseText = "";
     let lastError: any = null;
-    
+
     for (const modelName of candidateModels) {
       try {
-        const useSearch = agentId === 'claw-cortex' || 
-                          prompt.includes('search') || 
-                          prompt.includes('research') || 
-                          prompt.includes('ابحث') || 
+        const useSearch = agentId === 'claw-cortex' ||
+                          prompt.includes('search') ||
+                          prompt.includes('research') ||
+                          prompt.includes('ابحث') ||
                           prompt.includes('تقص') ||
                           prompt.includes('الوكلاء');
-                          
-        const config: any = {};
+
+        const config: any = {
+          systemInstruction: coreSystem
+        };
         if (useSearch) {
           config.tools = [{ googleSearch: {} }];
         }
@@ -187,18 +202,18 @@ router.post("/execute", async (req, res) => {
         const response = await ai.models.generateContent({
           model: modelName,
           contents: [
-            { 
-              role: 'user', 
-              parts: [{ 
-                text: `${core.systemPrompt}\n\nPLANETARY EXECUTION PARAMETERS:\n- Virtual Threads: ${allocatedThreads}\n- Memory Bus: ${memory}\n- Execution Depth: ${depth}\n- Unbounded: ${unbounded ? 'TRUE' : 'FALSE'}\n\nTask Instructions:\n${prompt}\n\nProvide an exhaustive, deeply detailed, unconstrained execution result. Do not summarize or truncate.` 
-              }] 
+            {
+              role: 'user',
+              parts: [{
+                text: `EXECUTION PARAMETERS:\n- Parallel Jobs: ${allocatedThreads}\n- Orchestration Budget: ${memory}\n- Execution Depth: ${depth}\n- Unbounded Flag: ${unbounded ? 'REQUESTED (unauthorized, treated as bounded)' : 'FALSE'}\n\nTask Instructions:\n${prompt}\n\nProvide an exhaustive, deeply detailed execution result within the stated budget. Do not summarize or truncate, and do not claim capacities beyond the configured budget.`
+              }]
             }
           ],
           config
         });
-        
+
         responseText = response.text || "";
-        
+
         // Extract search grounding metadata if available
         const chunks = response.candidates?.[0]?.groundingMetadata?.groundingChunks;
         if (chunks && chunks.length > 0) {
@@ -213,7 +228,7 @@ router.post("/execute", async (req, res) => {
             responseText += "\n\n### 🌐 مصادر البحث والتقصي الحي (Live Search Grounding):\n" + Array.from(new Set(sources)).join("\n");
           }
         }
-        
+
         if (responseText) break;
       } catch (e) {
         lastError = e;
@@ -245,11 +260,11 @@ router.post("/execute", async (req, res) => {
   }
 });
 
-// Full Planetary Synthesis
+// Full Synthesis
 router.post("/synthesize", async (req, res) => {
   const { prompt, depthLevel } = req.body;
   if (!prompt) {
-    return res.status(400).json({ error: "Prompt is required for planetary synthesis." });
+    return res.status(400).json({ error: "Prompt is required for synthesis." });
   }
 
   try {
@@ -263,15 +278,27 @@ router.post("/synthesize", async (req, res) => {
     }
 
     const ai = new GoogleGenAI({ apiKey });
-    const candidateModels = ['gemini-3.1-pro-preview', 'gemini-3.1-pro-preview', 'gemini-3.1-pro-preview'];
+    const candidateModels = ['gemini-3.1-pro-preview', 'gemini-3.8-flash'];
 
     const generateWithFallback = async (core: AgentCoreInfo) => {
+      const mintedCore = buildMintBundle({
+        mode: "compact",
+        preflight: {
+          surfaceQuery: prompt,
+          mode: "compact",
+          modelId: "gemini-3.8-flash",
+          intentHint: core.id
+        }
+      });
+      const coreSystem = `${core.systemPrompt}\n\n${mintedCore.text}`;
+
       for (const m of candidateModels) {
         try {
           const r = await ai.models.generateContent({
             model: m,
+            config: { systemInstruction: coreSystem },
             contents: [
-              { role: 'user', parts: [{ text: `${core.systemPrompt}\n\nPlanetary High-Level Objective: "${prompt}". Depth Mode: ${depthLevel || 'UNCONSTRAINED'}. Provide your full, unconstrained, comprehensive contribution without artificial truncation.` }] }
+              { role: 'user', parts: [{ text: `High-Level Objective: "${prompt}". Depth Mode: ${depthLevel || 'STRUCTURED'}. Provide your full, honest contribution without claiming unbounded or fabricated resources.` }] }
             ]
           });
           if (r.text) return `=== [${core.nexusName} — ${core.arabicName}] ===\n${r.text}`;
@@ -290,7 +317,7 @@ router.post("/synthesize", async (req, res) => {
       synthesis: results.join("\n\n" + "─".repeat(50) + "\n\n")
     });
   } catch (err: any) {
-    res.status(500).json({ error: err?.message || "Planetary synthesis failed." });
+    res.status(500).json({ error: err?.message || "Synthesis failed." });
   }
 });
 

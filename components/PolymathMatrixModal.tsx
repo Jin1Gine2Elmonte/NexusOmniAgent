@@ -248,8 +248,8 @@ export const PolymathMatrixModal: React.FC<PolymathMatrixModalProps> = ({ isOpen
 
     const logs = [
       `[NEXUS::ClawCortex]: Crawling ${currentSub.rawSkillsCount} raw skill fragments across historical eras...`,
-      `[NEXUS::HermesDirective]: Executing uncensored semantic deduplication algorithm...`,
-      `[NEXUS::OdysseusPath]: Synthesizing meta-skills into Sovereign Polymath Matrix...`,
+      `[NEXUS::DirectiveCore]: Executing bounded semantic deduplication algorithm...`,
+      `[NEXUS::HorizonPath]: Synthesizing meta-skills into Sovereign Polymath Matrix...`,
       `[NEXUS::AgentOS Kernel]: Allocating process bus memory for refined node tree...`
     ];
 
@@ -260,7 +260,7 @@ export const PolymathMatrixModal: React.FC<PolymathMatrixModalProps> = ({ isOpen
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          agentId: 'hermes-directive',
+          agentId: 'directive-core',
           prompt: `قم بتصفية وتنقية وتنظيف المهارات المكرورة والمتقاربة لتخصص (${currentSub.nameAr}) البالغ عددها (${currentSub.rawSkillsCount} مهارة خام).
 استخرج المهارات السيادية المنقاة فقط (3 إلى 5 مهارات جوهرية) مع إيضاح كيف تحولت المهارات القديمة المكررة إلى هذه النواة الصافية.`
         })

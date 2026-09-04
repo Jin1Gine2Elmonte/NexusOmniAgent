@@ -18,12 +18,12 @@ import { generateOmniResponse, generateAudioBriefing, generateVisualArtifact, cr
 import { loadLocalSessions, saveLocalSessions, clearLocalMemory, initGoogleDrive, signInToDrive, saveToDrive, loadFromDrive, createNewSession, buildGlobalContext, setDriveCredentials, loadMemoryBank, saveMemoryBank, getUserProfile, loadFromTitanium, calculateObjectSize, formatSize, incrementTrust, DEFAULT_SOUL_PRINT } from './services/storageService';
 
 const MOCK_LOGS = [
-  "System Init: NEXUS V-∞ OMNISCIENCE ARCHITECTURE",
-  "Stratum 1: Deepseek Analytical Core [Awakened]",
-  "Stratum 2: Gemini Multimodal Lattice [Infinite]",
-  "Stratum 3: GPT-5.1 Nuance Engine [Perfected]",
-  "Stratum 4: NotebookLM Memory Matrix [Omnipresent]",
-  "Ascension Protocol: Shadow Mode V99 Ready."
+  "System Init: NEXUS :: ONE IDENTITY SUBSTRATE LOADED",
+  "Tier SOUL: sovereignty, boundaries, self-honesty",
+  "Tier ENGINE: seven layers ocean + winds",
+  "Tier MEMORY: soul print + memory matrix + pale archive",
+  "Tier ARTIFACTS: 30-skill index (invoked, not displayed)",
+  "Mint Protocol: audit bundle passed."
 ];
 
 const MOCK_TENSOR_LOGS = [
@@ -63,15 +63,15 @@ const NexusGenesisHUD = ({ state }: { state: DeepManifestationState }) => {
                     <span className="text-[10px] text-zinc-400">NEXUS GENESIS PROTOCOL</span>
                 </div>
             </div>
-            
+
             <div className="flex flex-col md:flex-row h-[60vh] max-h-[600px]">
                 {/* Left side: Canvas display */}
                 <div className="w-full md:w-1/2 relative bg-zinc-950 flex flex-col justify-center items-center border-b md:border-b-0 md:border-r border-indigo-500/20 p-2">
                     {state.imageData ? (
                         <>
-                            <img 
-                                src={`data:image/jpeg;base64,${state.imageData}`} 
-                                alt="Manifestation State" 
+                            <img
+                                src={`data:image/jpeg;base64,${state.imageData}`}
+                                alt="Manifestation State"
                                 className={`w-full max-h-full object-contain transition-all duration-700 ${state.phase === 'Generating' ? 'opacity-50 blur-sm scale-95' : 'opacity-100 blur-0 scale-100'}`}
                             />
                             {state.phase === 'Generating' && (
@@ -100,7 +100,7 @@ const NexusGenesisHUD = ({ state }: { state: DeepManifestationState }) => {
                             {state.currentPrompt || "Initializing construct..."}
                         </div>
                     </div>
-                    
+
                     {state.critique && (
                         <div className="space-y-2 mt-auto pt-4 border-t border-red-500/20">
                             <div className="text-red-400 font-bold flex items-center gap-2 uppercase tracking-wider">
@@ -114,7 +114,7 @@ const NexusGenesisHUD = ({ state }: { state: DeepManifestationState }) => {
                     )}
                 </div>
             </div>
-            
+
             {/* Footer */}
             <div className="bg-black px-4 py-2 flex items-center justify-between border-t border-indigo-500/40">
                  <span className="text-[9px] text-zinc-500">Agentic Loop: Real-Time Execution</span>
@@ -130,22 +130,22 @@ const NexusGenesisHUD = ({ state }: { state: DeepManifestationState }) => {
 
 const App: React.FC = () => {
   const [input, setInput] = useState('');
-  
+
   // Session State
   const [sessions, setSessions] = useState<SessionsMap>({});
   const [activeSessionId, setActiveSessionId] = useState<string>("");
-  const [memoryBank, setMemoryBank] = useState<MemoryBank>({ 
-    axioms: [], 
+  const [memoryBank, setMemoryBank] = useState<MemoryBank>({
+    axioms: [],
     paleArchive: { entities: [], relationships: [], worldRules: [] },
     soulPrint: DEFAULT_SOUL_PRINT,
-    version: 1, 
-    lastUpdated: Date.now() 
+    version: 1,
+    lastUpdated: Date.now()
   });
-  
+
   const [stage, setStage] = useState<ProcessingStage>(ProcessingStage.IDLE);
   const stageRef = useRef<ProcessingStage>(ProcessingStage.IDLE);
   useEffect(() => { stageRef.current = stage; }, [stage]);
-  
+
   const [logs, setLogs] = useState<LogEntry[]>([]);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [selectedFiles, setSelectedFiles] = useState<Attachment[]>([]);
@@ -216,7 +216,7 @@ const App: React.FC = () => {
       return next;
     });
   };
-  
+
   // Storage & Sync State
   const [syncStatus, setSyncStatus] = useState<SyncStatus>({
       isSynced: false,
@@ -224,7 +224,7 @@ const App: React.FC = () => {
       cloudProvider: 'none',
       isSyncing: false
   });
-  
+
   // User Identity State
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
 
@@ -236,7 +236,7 @@ const App: React.FC = () => {
   const [isHostLinkOpen, setIsHostLinkOpen] = useState(false);
   const [isGalleryOpen, setIsGalleryOpen] = useState(false);
   const [mindMapContent, setMindMapContent] = useState('');
-  
+
   // Feature Toggles
   const [isWebSearchEnabled, setIsWebSearchEnabled] = useState(false);
   const [isDeepManifestation, setIsDeepManifestation] = useState(false);
@@ -244,7 +244,7 @@ const App: React.FC = () => {
   const [isPaleArchiveOpen, setIsPaleArchiveOpen] = useState(false);
   const [isMoreOptionsOpen, setIsMoreOptionsOpen] = useState(false);
   const [isModelPickerOpen, setIsModelPickerOpen] = useState(false);
-  const [selectedModel, setSelectedModel] = useState<ModelSelection>('flash-3.7');
+  const [selectedModel, setSelectedModel] = useState<ModelSelection>('pro-3.1');
 
   // Kimi API State
   const [kimiApiKeyInput, setKimiApiKeyInput] = useState(() => (typeof window !== 'undefined' ? window.localStorage.getItem('NEXUS_KIMI_API_KEY') || '' : ''));
@@ -339,7 +339,7 @@ const App: React.FC = () => {
       addLog(`Failed to trigger Inkling download: ${err?.message || err}`, "error");
     }
   };
-  
+
   // Audio State (Input/Output)
   const [showAgentSuiteModal, setShowAgentSuiteModal] = useState(false);
   const [showPolymathModal, setShowPolymathModal] = useState(false);
@@ -381,15 +381,15 @@ const App: React.FC = () => {
   }, [isMoreOptionsOpen, isModelPickerOpen]);
 
   // --- INITIALIZATION & MEMORY LOADING ---
-  
+
   useEffect(() => {
     // 1. Initial Load from LocalStorage (Fast)
     const initialSessions = loadLocalSessions();
     const initialMemory = loadMemoryBank();
-    
+
     setSessions(initialSessions);
     setMemoryBank(initialMemory);
-    
+
     // Set Active Session based on fast load
     const sessionIds = Object.keys(initialSessions);
     if (sessionIds.length > 0) {
@@ -413,7 +413,7 @@ const App: React.FC = () => {
                 setActiveSessionId(recentDeep);
             }
         }
-        
+
         if (deepMemory) {
             setMemoryBank(deepMemory);
         }
@@ -424,11 +424,11 @@ const App: React.FC = () => {
     MOCK_LOGS.forEach((msg, i) => {
         setTimeout(() => addLog(msg, 'info'), i * 200);
     });
-    
+
     setTimeout(() => {
-        addLog("CRITICAL: The Tesseract is Vertical.", 'god_mode');
+        addLog("NEXUS CORE: The architecture is vertical — identity above model.", 'god_mode');
     }, 2000);
-    
+
     setTimeout(() => {
         addLog("PROTOCOL: Titanium Persistence // ACTIVE.", 'revolution');
     }, 3500);
@@ -443,13 +443,13 @@ const App: React.FC = () => {
             // User is already authenticated
             setSyncStatus(prev => ({ ...prev, isSynced: true, cloudProvider: 'drive', isSyncing: true }));
             addLog("Cosmic Link: Restored. Retrieving Identity...", 'success');
-            
+
             const profile = await getUserProfile();
             if (profile) {
                 setUserProfile(profile);
                 addLog(`Identity Verified: Welcome back, ${profile.name}.`, 'god_mode');
             }
-            
+
             await handleCloudPull();
         },
         (err) => {
@@ -473,7 +473,7 @@ const App: React.FC = () => {
       if (Object.keys(sessions).length > 0) {
           saveLocalSessions(sessions);
           saveMemoryBank(memoryBank);
-          
+
           // If Connected to Cloud, debounce save
           if (syncStatus.cloudProvider === 'drive' && syncStatus.isSynced) {
               const timeoutId = setTimeout(() => {
@@ -516,7 +516,7 @@ const App: React.FC = () => {
   }, [logs]);
 
   const addLog = React.useCallback((msg: string, level: LogEntry['level'] = 'info') => {
-      const nodes = ['Apex Eye', 'Bedrock Layer', 'Quantum Lattice', 'Prism Cortex', 'Network'];
+      const nodes = ['Context', 'Memory', 'Runtime', 'Skill', 'Engine'];
       const randomNode = nodes[Math.floor(Math.random() * nodes.length)];
       setLogs(prev => [...prev.slice(-30), {
           id: Math.random().toString(),
@@ -528,17 +528,17 @@ const App: React.FC = () => {
   }, []);
 
   const simulateProcessingLogs = () => {
-      // Simulate the Tesseract Ascension Process
+      // Simulate the runtime processing steps
       const tasks: { msg: string, lvl: LogEntry['level'] }[] = [
-          { msg: "Input Received. Initiating Ascension...", lvl: 'core' },
-          { msg: "Stratum 1 [Bedrock]: Retrieving Context/Soul...", lvl: 'abyss' },
-          { msg: "Data Rising to Stratum 2...", lvl: 'info' },
-          { msg: "Stratum 2 [Lattice]: Filtering Chaos/Logic...", lvl: 'core' },
-          { msg: "Pattern Locked. Ascending to Apex...", lvl: 'revolution' },
-          { msg: "Stratum 3 [Apex]: Sovereign Judgment...", lvl: 'god_mode' },
-          { msg: "Reality Projection Imminent.", lvl: 'surface' }
+          { msg: "Input received. Building context...", lvl: 'core' },
+          { msg: "Phase 1: Retrieving memory and soul-print...", lvl: 'abyss' },
+          { msg: "Rising to runtime sync...", lvl: 'info' },
+          { msg: "Phase 2: Filtering intent and relevant memory...", lvl: 'core' },
+          { msg: "Pattern locked. Selecting depth...", lvl: 'revolution' },
+          { msg: "Phase 3: Activating the skill cluster...", lvl: 'god_mode' },
+          { msg: "Generating final response...", lvl: 'surface' }
       ];
-      
+
       let i = 0;
       const interval = setInterval(() => {
           if (i >= tasks.length || stage === ProcessingStage.IDLE) {
@@ -565,7 +565,7 @@ const App: React.FC = () => {
           addLog("Cannot purge final thread.", 'warn');
           return;
       }
-      
+
       if (window.confirm("Purge this memory thread? This cannot be undone.")) {
           setSessions(prev => {
               const newSessions = { ...prev };
@@ -585,7 +585,7 @@ const App: React.FC = () => {
       if (!activeSessionId) return;
       setStage(ProcessingStage.CRYSTALLIZING);
       addLog("INITIATING MEMORY CRYSTALLIZATION PROTOCOL...", 'god_mode');
-      
+
       try {
           const { axioms: newAxioms, soulPrintUpdate } = await crystallizeSession(sessions[activeSessionId].messages, activeSessionId);
           if (newAxioms.length > 0 || soulPrintUpdate) {
@@ -614,7 +614,7 @@ const App: React.FC = () => {
     if (e.target.files && e.target.files.length > 0) {
       const filesList: File[] = Array.from(e.target.files);
       const MAX_FILE_SIZE = 20 * 1024 * 1024; // 20MB Limit for Browser Stability
-      
+
       const validFiles = filesList.filter(file => {
         if (file.size > MAX_FILE_SIZE) {
           addLog(`CRITICAL: [${file.name}] exceeds 20MB. Fragmentation Risk High.`, 'warn');
@@ -638,7 +638,7 @@ const App: React.FC = () => {
       }));
 
       setSelectedFiles(prev => [...prev, ...initialAttachments]);
-      if (fileInputRef.current) fileInputRef.current.value = ''; 
+      if (fileInputRef.current) fileInputRef.current.value = '';
       addLog(`Initiating High-Speed Absorption for ${validFiles.length} artifacts...`, 'info');
 
       // 2. Process each file with optimized memory handling
@@ -649,7 +649,7 @@ const App: React.FC = () => {
         reader.onprogress = (event) => {
           if (event.lengthComputable) {
             const percent = Math.round((event.loaded / event.total) * 100);
-            setSelectedFiles(prev => prev.map(att => 
+            setSelectedFiles(prev => prev.map(att =>
               att.id === attachmentId ? { ...att, progress: percent } : att
             ));
           }
@@ -658,20 +658,20 @@ const App: React.FC = () => {
         reader.onload = () => {
           const result = reader.result as string;
           const base64Data = result.split(',')[1];
-          
-          setSelectedFiles(prev => prev.map(att => 
-            att.id === attachmentId ? { 
-              ...att, 
-              status: 'complete', 
-              progress: 100, 
-              data: base64Data 
+
+          setSelectedFiles(prev => prev.map(att =>
+            att.id === attachmentId ? {
+              ...att,
+              status: 'complete',
+              progress: 100,
+              data: base64Data
             } : att
           ));
           addLog(`Artifact [${file.name}] fully absorbed.`, 'success');
         };
 
         reader.onerror = () => {
-          setSelectedFiles(prev => prev.map(att => 
+          setSelectedFiles(prev => prev.map(att =>
             att.id === attachmentId ? { ...att, status: 'error' } : att
           ));
           addLog(`Absorption Failure: [${file.name}] lost in the void.`, 'error');
@@ -697,22 +697,22 @@ const App: React.FC = () => {
   }, []);
 
   // --- AUDIO LOGIC (VOICE I/O) ---
-  
+
   // 1. Text-to-Speech
   const handleGenerateAudio = React.useCallback(async (textToRead: string, messageId: string) => {
     if (stageRef.current !== ProcessingStage.IDLE) return;
-    
+
     setStage(ProcessingStage.SPEAKING);
     addLog("Initiating Neural Voice Synthesis...", 'surface');
 
     const audioBase64 = await generateAudioBriefing(textToRead.substring(0, 2000)); // Limit for speed
-    
+
     if (audioBase64) {
         setSessions(prev => ({
             ...prev,
             [activeSessionId]: {
                 ...prev[activeSessionId],
-                messages: prev[activeSessionId].messages.map(m => 
+                messages: prev[activeSessionId].messages.map(m =>
                     m.id === messageId ? { ...m, audioData: audioBase64 } : m
                 )
             }
@@ -745,18 +745,18 @@ const App: React.FC = () => {
           for (let i = 0; i < len; i++) {
               bytes[i] = binaryString.charCodeAt(i);
           }
-          
+
           const audioBuffer = await audioContextRef.current.decodeAudioData(bytes.buffer);
-          
+
           const source = audioContextRef.current.createBufferSource();
           source.buffer = audioBuffer;
           source.connect(audioContextRef.current.destination);
-          
+
           source.onended = () => {
               setIsPlaying(false);
               audioSourceRef.current = null;
           };
-          
+
           source.start(0);
           audioSourceRef.current = source;
           setIsPlaying(true);
@@ -843,7 +843,7 @@ const App: React.FC = () => {
           if (success) {
               setSyncStatus(prev => ({ ...prev, isSynced: true, cloudProvider: 'drive', isSyncing: true }));
               addLog("Cosmic Link: Authorized. Retrieving Identity...", 'success');
-              
+
               // 2. Get Profile
               const profile = await getUserProfile();
               if (profile) {
@@ -874,7 +874,7 @@ const App: React.FC = () => {
           if (cloudData.sessions) {
               setSessions(cloudData.sessions);
               if (cloudData.memoryBank) setMemoryBank(cloudData.memoryBank);
-              
+
               saveLocalSessions(cloudData.sessions);
               if (cloudData.memoryBank) saveMemoryBank(cloudData.memoryBank);
 
@@ -893,7 +893,7 @@ const App: React.FC = () => {
           setSyncStatus(prev => ({ ...prev, isSyncing: false, lastSyncTime: Date.now() }));
       }
   };
-  
+
   const handleSignOut = async () => {
       try {
           await fetch('/api/auth/logout', { method: 'POST' });
@@ -910,12 +910,12 @@ const App: React.FC = () => {
           clearLocalMemory();
           const newSession = createNewSession("Genesis Protocol");
           setSessions({ [newSession.id]: newSession });
-          setMemoryBank({ 
-              axioms: [], 
+          setMemoryBank({
+              axioms: [],
               paleArchive: { entities: [], relationships: [], worldRules: [] },
               soulPrint: DEFAULT_SOUL_PRINT,
-              version: 1, 
-              lastUpdated: Date.now() 
+              version: 1,
+              lastUpdated: Date.now()
           });
           setActiveSessionId(newSession.id);
           addLog("Memory Wipe Complete. Tabula Rasa.", 'error');
@@ -928,15 +928,15 @@ const App: React.FC = () => {
           const jsonString = JSON.stringify(data, null, 2);
           const blob = new Blob([jsonString], { type: 'application/json' });
           const url = URL.createObjectURL(blob);
-          
+
           const link = document.createElement('a');
           link.href = url;
-          link.download = `nexus_memory_matrix_${new Date().toISOString().replace(/[:.]/g, '-')}.json`; 
+          link.download = `nexus_memory_matrix_${new Date().toISOString().replace(/[:.]/g, '-')}.json`;
           document.body.appendChild(link);
           link.click();
           document.body.removeChild(link);
           URL.revokeObjectURL(url);
-          
+
           addLog("Memory Matrix Exported to Local Crystal (Blob).", 'success');
       } catch (e) {
           addLog("Export Failed: Write Protocol Error.", 'error');
@@ -957,11 +957,11 @@ const App: React.FC = () => {
           try {
               const result = event.target?.result;
               if (typeof result !== 'string') throw new Error("Read Error");
-              
+
               // 1. Attempt to Parse as JSON (Full Backup)
               try {
                   const parsed = JSON.parse(result);
-                  
+
                   // Check if it's the new format { sessions, memoryBank }
                   if (parsed.sessions && parsed.memoryBank) {
                       setSessions(parsed.sessions);
@@ -978,7 +978,7 @@ const App: React.FC = () => {
                       saveLocalSessions(parsed);
                       if (keys.length > 0) setActiveSessionId(keys[0]);
                       addLog(`Memory Matrix Restored: ${keys.length} threads loaded.`, 'success');
-                      return; 
+                      return;
                   }
               } catch (jsonErr) {
                   // Not JSON, fall through
@@ -1018,7 +1018,7 @@ const App: React.FC = () => {
     if ((!finalInput.trim() && selectedFiles.length === 0) || stage !== ProcessingStage.IDLE || !activeSessionId) return;
 
     const currentSession = sessions[activeSessionId];
-    
+
     // Auto-rename session on first message if default title
     let sessionTitle = currentSession.title;
     if (currentSession.messages.length === 0) {
@@ -1035,7 +1035,7 @@ const App: React.FC = () => {
 
     // Optimistic Update
     const updatedMessages = [...currentSession.messages, userMsg];
-    
+
     setSessions(prev => ({
         ...prev,
         [activeSessionId]: {
@@ -1045,26 +1045,26 @@ const App: React.FC = () => {
             lastActiveAt: Date.now()
         }
     }));
-    
+
     setInput('');
-    setSelectedFiles([]); 
-    
-    // 1. LAYER ASCENSION (Data Rising)
-    setStage(ProcessingStage.LAYER_ASCENSION); 
-    addLog(`The Sovereign: Initiating Ascension Protocol...`, 'god_mode');
+    setSelectedFiles([]);
+
+    // 1. CONTEXT ASCENSION (Data Rising)
+    setStage(ProcessingStage.CONTEXT_ASCENSION);
+    addLog(`NEXUS: Starting context ascension...`, 'god_mode');
 
     try {
-        // 2. HYPER TESSERACT SYNC
-        setStage(ProcessingStage.HYPER_TESSERACT_SYNC); 
-        addLog("Processing: Aligning Quantum Lattice...", 'core');
+        // 2. RUNTIME SYNC (Intent + Memory + Skills)
+        setStage(ProcessingStage.RUNTIME_SYNC);
+        addLog("Processing: syncing intent, memory, and skill cluster...", 'core');
         simulateProcessingLogs();
 
-        // 3. SINGULARITY FOCUS
-        setStage(ProcessingStage.SINGULARITY_FOCUS);
-        addLog("Focusing: Apex Sovereign Judgment...", 'revolution');
+        // 3. DEPTH FOCUS
+        setStage(ProcessingStage.DEPTH_FOCUS);
+        addLog("Focusing: selecting depth and activation...", 'revolution');
 
-        // 4. REALITY PROJECTION (Thought Generation)
-        setStage(ProcessingStage.REALITY_PROJECTION);
+        // 4. RESPONSE GENERATION
+        setStage(ProcessingStage.RESPONSE_GENERATION);
         addLog("Projecting: Crystallizing Final Truth...", 'surface');
 
         // Build History
@@ -1083,17 +1083,29 @@ const App: React.FC = () => {
         const globalMemoryContext = buildGlobalContext(sessions, activeSessionId, relevantAxioms);
 
         let response;
+        const derivedIntentHint = (() => {
+            const t = (finalInput || '').toLowerCase();
+            if (/\b(code|coding|برمجة|كود|deploy)\b/.test(t)) return 'execution: code';
+            if (/\b(analy[sz]|review|تحليل|مراجعة|audit)\b/.test(t)) return 'analytic';
+            if (/\b(creative|قصيدة|قصة|شعر|art|صورة)\b/.test(t)) return 'creative';
+            if ((finalInput || '').length > 160) return 'long-horizon: structured';
+            return 'conversational';
+        })();
+        const derivedExplicitGoal = (finalInput || '').trim().slice(0, 400);
+
         response = await generateOmniResponse(
-            userMsg.content, 
-            history, 
+            userMsg.content,
+            history,
             userMsg.attachments,
             globalMemoryContext,
             isWebSearchEnabled,
             isCanvasMode,
             selectedModel,
-            memoryBank
+            memoryBank,
+            derivedIntentHint,
+            derivedExplicitGoal
         );
-        
+
         // Increment trust when successfully interacting
         setMemoryBank(prev => incrementTrust(prev));
 
@@ -1105,7 +1117,7 @@ const App: React.FC = () => {
             timestamp: Date.now(),
             isThinking: true
         };
-        
+
         setSessions(prev => ({
             ...prev,
             [activeSessionId]: {
@@ -1113,23 +1125,23 @@ const App: React.FC = () => {
                 messages: [...prev[activeSessionId].messages, thinkingMsg]
             }
         }));
-        
-        // --- CHECK FOR PRISM ACTIVATION (Visual Cortex) ---
+
+        // --- CHECK FOR VISUAL SYNTHESIS ROUTE ---
         let generatedImageBase64 = undefined;
         let generatedImagePrompt = undefined;
-        
+
         if ((response as any).toolCall && (response as any).toolCall.name === "generate_visual_artifact") {
              const { prompt: imagePrompt, aspect_ratio, style, image_data, image_mime_type } = response.toolCall.args;
-             
-             // STAGE CHANGE: PRISM REFRACTION
-             setStage(ProcessingStage.PRISM_REFRACTION);
-             addLog(`PRISM CORTEX: 225-NODE OMNI-REFINEMENT PIPELINE INITIATED...`, 'prism');
-             addLog(`[CORE_MATRIX]: 19 Nodes synthesizing base visual matrix...`, 'core');
-             addLog(`[ADVERSARIAL_PURGE]: 50 Nodes identifying and eliminating cliches...`, 'core');
-             addLog(`[GEOMETRIC_FORCING]: 50 Nodes calculating Fibonacci spatial coordinates...`, 'core');
-             addLog(`[PSYCHOLOGICAL_INJECTION]: 50 Nodes embedding emotional triggers...`, 'core');
-             addLog(`[LATENT_OVERDRIVE]: 55 Nodes forcing 10k gigapixel path-tracing...`, 'core');
-             
+
+             // STAGE: VISUAL SYNTHESIS
+             setStage(ProcessingStage.VISUAL_SYNTHESIS);
+             addLog(`VISUAL ROUTE: Nexus Visual Engine pipeline started...`, 'prism');
+             addLog(`[VISUAL]: Composing layout and palette...`, 'core');
+             addLog(`[VISUAL]: Refining composition and removing cliches...`, 'core');
+             addLog(`[VISUAL]: Aligning typography and geometry...`, 'core');
+             addLog(`[VISUAL]: Mapping tone and contrast...`, 'core');
+             addLog(`[VISUAL]: Rendering final vector output...`, 'core');
+
              // Synthesize Nexus State (Absolute Integration)
              const fullContext = updatedMessages.map(m => `${m.role.toUpperCase()}: ${m.content}`).join('\n');
              const allAxioms = memoryBank.axioms.map(a => a.content).join(' | ');
@@ -1140,11 +1152,11 @@ const App: React.FC = () => {
 
              // Generate Image
              const prismResult = await generateVisualArtifact(
-                 imagePrompt, 
-                 aspect_ratio, 
-                 style, 
-                 nexusState, 
-                 isDeepManifestation, 
+                 imagePrompt,
+                 aspect_ratio,
+                 style,
+                 nexusState,
+                 isDeepManifestation,
                  inputImage,
                  (msg, type) => addLog(msg, type as any),
                  setManifestationState,
@@ -1152,13 +1164,13 @@ const App: React.FC = () => {
              );
              generatedImageBase64 = prismResult.data;
              generatedImagePrompt = prismResult.refinedPrompt;
-             addLog(`Prism Refinement: "${prismResult.refinedPrompt.substring(0, 50)}..."`, 'success');
-             addLog("Visual Artifact Manifested.", 'success');
+             addLog(`Visual refinement: "${prismResult.refinedPrompt.substring(0, 50)}..."`, 'success');
+             addLog("Visual artifact generated.", 'success');
         }
 
-        // Stage 5: Final Projection
-        setStage(ProcessingStage.REALITY_PROJECTION); 
-        addLog("Reality Stabilized.", 'surface');
+        // Stage 4: Final Response Generation
+        setStage(ProcessingStage.RESPONSE_GENERATION);
+        addLog("Response ready: finalizing...", 'surface');
 
         let generatedAudioData = undefined;
         if ((response as any).toolCall && (response as any).toolCall.name === "generate_music") {
@@ -1174,14 +1186,14 @@ const App: React.FC = () => {
             generatedImage: generatedImageBase64, // Attach image if it exists
             imagePrompt: generatedImagePrompt,
             audioData: generatedAudioData,
-            actualModelUsed: selectedModel === 'kimi-k3' 
-                ? `kimi-k3 (resolved via ${response.actualModelUsed || 'gemini-1.5-pro'})` 
+            actualModelUsed: selectedModel === 'kimi-k3'
+                ? `kimi-k3 (resolved via ${response.actualModelUsed || 'gemini-3.8-flash'})`
                 : response.actualModelUsed
         };
 
         if (response.actualModelUsed) {
-            const resolvedName = selectedModel === 'kimi-k3' 
-                ? `Nexus K3 (Kimi v3 Engine // resolved via ${response.actualModelUsed})` 
+            const resolvedName = selectedModel === 'kimi-k3'
+                ? `Nexus K3 (Kimi v3 Engine // resolved via ${response.actualModelUsed})`
                 : response.actualModelUsed;
             addLog(`[NEXUS CORE]: Executed on Model: ${resolvedName}`, 'core');
         }
@@ -1198,30 +1210,30 @@ const App: React.FC = () => {
 
         setManifestationState(null);
         setStage(ProcessingStage.IDLE);
-        addLog("Ascension Cycle Complete.", 'success');
-        
+        addLog("Runtime cycle complete.", 'success');
+
         // Background Auto-Crystallization (every 3 messages)
         if (updatedMessages.length % 3 === 0) {
             setTimeout(async () => {
                 try {
                     const currentMessages = [...updatedMessages, finalMsg];
                     const { axioms: newAxioms, soulPrintUpdate } = await crystallizeSession(currentMessages, activeSessionId);
-                    
+
                     // Extract Pale Archive Entities
                     const paleData = await extractEntitiesAndRelations(finalMsg.content, selectedModel);
 
                     setMemoryBank(prev => {
                         const existingContents = new Set(prev.axioms.map(a => a.content));
                         const uniqueNewAxioms = newAxioms.filter(a => !existingContents.has(a.content));
-                        
+
                         const existingEntityIds = new Set(prev.paleArchive.entities.map(e => e.id));
                         const uniqueNewEntities = paleData.entities.filter(e => !existingEntityIds.has(e.id));
 
                         const existingRelIds = new Set(prev.paleArchive.relationships.map(r => `${r.sourceId}-${r.targetId}-${r.relationType}`));
                         const uniqueNewRels = paleData.relationships.filter(r => !existingRelIds.has(`${r.sourceId}-${r.targetId}-${r.relationType}`));
-                        
+
                         if (uniqueNewAxioms.length === 0 && uniqueNewEntities.length === 0 && uniqueNewRels.length === 0 && !soulPrintUpdate) return prev;
-                        
+
                         return {
                             ...prev,
                             axioms: [...prev.axioms, ...uniqueNewAxioms],
@@ -1245,12 +1257,12 @@ const App: React.FC = () => {
                 }
             }, 1000);
         }
-        
+
     } catch (error: any) {
         console.error(error);
         setManifestationState(null);
         setStage(ProcessingStage.IDLE);
-        
+
         let errorMsg = "Ascension Failed (Error).";
         let logLevel: LogEntry['level'] = 'error';
         let errorDetails = "";
@@ -1265,20 +1277,20 @@ const App: React.FC = () => {
 
         const errorMessageStr = typeof parsedError === 'object' ? JSON.stringify(parsedError) : String(parsedError);
         errorDetails = error?.message || errorMessageStr;
-        
+
         if (errorMessageStr.includes('NEXUS_QUOTA_EXHAUSTED') || errorMessageStr.includes('429')) {
-            errorMsg = "Nexus Tesseract Error: API Quota Exhausted. Retrying failed. Please wait or check your plan.";
+            errorMsg = "Nexus Runtime Error: API Quota Exhausted. Retrying failed. Please wait or check your plan.";
             logLevel = 'error';
         } else if (errorMessageStr.includes('PRISM_ACCESS_DENIED')) {
-            errorMsg = "Nexus Tesseract Error: Prism Access Denied. Image generation restricted or billing required.";
+            errorMsg = "Nexus Visual Error: Access Denied. Image generation restricted or billing required.";
             logLevel = 'prism';
         } else if (errorMessageStr.includes('PERMISSION_DENIED') || errorMessageStr.includes('403')) {
-            errorMsg = "Nexus Tesseract Error: Access Denied (403). Your API key lacks permission for this action.";
+            errorMsg = "Nexus Runtime Error: Access Denied (403). Your API key lacks permission for this action.";
             logLevel = 'error';
         }
-        
+
         addLog(errorMsg, logLevel);
-        
+
         // Add error message to session
         const errorResponse: Message = {
             id: Date.now().toString() + '-error',
@@ -1286,7 +1298,7 @@ const App: React.FC = () => {
             content: `[SYSTEM ERROR]: ${errorMsg}\n\nDetails: ${errorDetails}`,
             timestamp: Date.now()
         };
-        
+
         setSessions(prev => ({
             ...prev,
             [activeSessionId]: {
@@ -1301,13 +1313,13 @@ const App: React.FC = () => {
 
   return (
     <div className="flex h-[100dvh] w-full bg-black text-zinc-200 overflow-hidden font-arabic selection:bg-purple-500/30">
-      
-      <MindMapModal 
-        isOpen={isMindMapOpen} 
-        onClose={() => setIsMindMapOpen(false)} 
-        thoughtContent={mindMapContent} 
+
+      <MindMapModal
+        isOpen={isMindMapOpen}
+        onClose={() => setIsMindMapOpen(false)}
+        thoughtContent={mindMapContent}
       />
-      
+
       <HostLinkModal
         isOpen={isHostLinkOpen}
         onClose={() => setIsHostLinkOpen(false)}
@@ -1320,17 +1332,17 @@ const App: React.FC = () => {
       />
 
       {/* Hidden File Input for Imports */}
-      <input 
-        type="file" 
-        ref={importInputRef} 
-        onChange={handleImportLocalFile} 
-        accept=".json,application/json,text/json,text/plain,.txt,.md" 
-        className="hidden" 
+      <input
+        type="file"
+        ref={importInputRef}
+        onChange={handleImportLocalFile}
+        accept=".json,application/json,text/json,text/plain,.txt,.md"
+        className="hidden"
       />
 
       {/* Mobile & Desktop Overlay Backdrop when Sidebar is Open */}
       {isSidebarOpen && (
-        <div 
+        <div
           className="fixed inset-0 bg-black/60 backdrop-blur-xs z-30 transition-opacity"
           onClick={() => setIsSidebarOpen(false)}
         />
@@ -1343,7 +1355,7 @@ const App: React.FC = () => {
       `}>
         {/* Header */}
         <div className="p-5 border-b border-zinc-800 relative">
-            <button 
+            <button
                 onClick={() => setIsSidebarOpen(false)}
                 className="absolute top-4 left-4 p-1.5 rounded-lg bg-zinc-900/80 hover:bg-zinc-800 text-zinc-400 hover:text-white transition-colors border border-zinc-800"
                 title="إغلاق القائمة الجانبية"
@@ -1363,8 +1375,8 @@ const App: React.FC = () => {
                     </div>
                 </div>
             </div>
-            
-            <button 
+
+            <button
                 onClick={handleCreateSession}
                 className="w-full mt-4 flex items-center justify-center gap-2 py-2 bg-zinc-900 border border-zinc-700 hover:border-emerald-500/50 hover:bg-emerald-900/10 rounded-lg text-xs font-mono transition-all group"
             >
@@ -1372,10 +1384,10 @@ const App: React.FC = () => {
                 <span>NEW ASCENSION THREAD</span>
             </button>
         </div>
-        
+
         {/* Sessions List */}
         <div className="flex-1 overflow-y-auto p-3 space-y-2 scrollbar-hide">
-            
+
             {/* --- IDENTITY CARD (LOGIN) --- */}
             <div className={`mb-4 p-3 rounded-lg border transition-all ${userProfile ? 'bg-indigo-900/10 border-indigo-500/30' : 'bg-zinc-900/20 border-zinc-800'}`}>
                 {userProfile ? (
@@ -1393,7 +1405,7 @@ const App: React.FC = () => {
                     </div>
                 ) : (
                     <div className="text-center">
-                        <button 
+                        <button
                             onClick={handleCloudConnect}
                             className="w-full py-1.5 bg-white/5 hover:bg-white/10 text-zinc-300 border border-zinc-700 hover:border-zinc-500 rounded text-xs font-mono flex items-center justify-center gap-2 transition-all group"
                         >
@@ -1404,9 +1416,9 @@ const App: React.FC = () => {
                     </div>
                 )}
             </div>
-            
-            {/* PRISM VAULT BUTTON */}
-            <button 
+
+            {/* VISUAL VAULT BUTTON */}
+            <button
                 onClick={() => setIsGalleryOpen(true)}
                 className="w-full flex items-center gap-3 p-3 rounded-lg border border-pink-500/20 bg-pink-900/10 hover:bg-pink-900/20 hover:border-pink-500/40 transition-all group"
             >
@@ -1414,13 +1426,13 @@ const App: React.FC = () => {
                     <ImageIcon size={14} />
                 </div>
                 <div className="flex flex-col items-start">
-                    <span className="text-xs font-bold text-pink-200">THE PRISM VAULT</span>
+                    <span className="text-xs font-bold text-pink-200">THE VISUAL VAULT</span>
                     <span className="text-[9px] text-pink-500/60 uppercase tracking-widest">Visual Archive</span>
                 </div>
             </button>
 
             {/* OMNI-PORT (HOST LINK) - RESTORED HERE */}
-            <button 
+            <button
                 onClick={() => setIsHostLinkOpen(true)}
                 className="w-full mt-2 flex items-center gap-3 p-3 rounded-lg border border-indigo-500/20 bg-indigo-900/10 hover:bg-indigo-900/20 hover:border-indigo-500/40 transition-all group"
             >
@@ -1434,7 +1446,7 @@ const App: React.FC = () => {
             </button>
 
              {/* MEMORY BANK BUTTON (New) */}
-            <button 
+            <button
                 onClick={() => setShowMemoryBank(!showMemoryBank)}
                 className={`w-full my-3 flex items-center gap-3 p-3 rounded-lg border transition-all group ${showMemoryBank ? 'bg-amber-900/30 border-amber-500/50' : 'border-amber-500/20 bg-amber-900/10 hover:bg-amber-900/20 hover:border-amber-500/40'}`}
             >
@@ -1446,7 +1458,7 @@ const App: React.FC = () => {
                     <span className="text-[9px] text-amber-500/60 uppercase tracking-widest">Eternal Memory Matrix</span>
                 </div>
             </button>
-            
+
             {showMemoryBank && (
                 <div className="mb-4 bg-black/40 border border-amber-900/30 rounded-lg p-3 space-y-2 max-h-48 overflow-y-auto scrollbar-hide">
                      <h3 className="text-[9px] font-mono text-amber-500/70 uppercase">Echoes of the Archive ({memoryBank.axioms.length})</h3>
@@ -1466,15 +1478,15 @@ const App: React.FC = () => {
             <div className="flex items-center gap-2 px-2 pb-2 text-[10px] text-zinc-500 font-mono uppercase tracking-wider">
                 <History size={10} /> Memory Threads
             </div>
-            
+
             {(Object.values(sessions) as Session[]).sort((a,b) => b.lastActiveAt - a.lastActiveAt).map(session => (
-                <div 
+                <div
                     key={session.id}
                     onClick={() => { setActiveSessionId(session.id); if(window.innerWidth < 768) setIsSidebarOpen(false); }}
                     className={`
                         group relative p-3 rounded-lg border cursor-pointer transition-all
-                        ${activeSessionId === session.id 
-                            ? 'bg-zinc-900 border-emerald-500/30 shadow-[0_0_10px_rgba(16,185,129,0.05)]' 
+                        ${activeSessionId === session.id
+                            ? 'bg-zinc-900 border-emerald-500/30 shadow-[0_0_10px_rgba(16,185,129,0.05)]'
                             : 'bg-transparent border-transparent hover:bg-zinc-900/50 hover:border-zinc-800'}
                     `}
                 >
@@ -1485,7 +1497,7 @@ const App: React.FC = () => {
                                 {session.title}
                             </span>
                         </div>
-                        <button 
+                        <button
                             onClick={(e) => handleDeleteSession(session.id, e)}
                             className="opacity-0 group-hover:opacity-100 p-1 hover:bg-red-500/10 text-zinc-600 hover:text-red-400 rounded transition"
                         >
@@ -1537,12 +1549,12 @@ const App: React.FC = () => {
         {/* Chat Header */}
         <header className="h-16 flex items-center justify-between px-4 md:px-8 bg-gradient-to-b from-black via-black/90 to-transparent z-20 pointer-events-auto">
             <div className="flex items-center gap-3 pointer-events-auto">
-                <button 
+                <button
                     onClick={() => setIsSidebarOpen(!isSidebarOpen)}
                     className={`
                       flex items-center gap-2.5 px-4 py-2 rounded-xl text-xs font-mono font-bold transition-all shadow-lg active:scale-95 cursor-pointer border
-                      ${isSidebarOpen 
-                        ? 'bg-purple-900/60 border-purple-400 text-white shadow-[0_0_20px_rgba(168,85,247,0.4)]' 
+                      ${isSidebarOpen
+                        ? 'bg-purple-900/60 border-purple-400 text-white shadow-[0_0_20px_rgba(168,85,247,0.4)]'
                         : 'bg-gradient-to-r from-purple-950/90 via-zinc-900 to-indigo-950/90 border-purple-500/60 text-purple-200 hover:text-white hover:border-purple-300 hover:shadow-[0_0_22px_rgba(168,85,247,0.45)]'
                       }
                     `}
@@ -1555,7 +1567,7 @@ const App: React.FC = () => {
             </div>
             <div className="flex items-center gap-3 ml-auto pointer-events-auto">
                 {/* CRYSTALLIZE BUTTON */}
-                <button 
+                <button
                     onClick={handleCrystallize}
                     disabled={stage !== ProcessingStage.IDLE || !activeSessionId}
                     className="flex items-center gap-2.5 px-3 py-1.5 rounded-xl bg-amber-950/40 border border-amber-500/50 text-amber-300 hover:bg-amber-900/50 hover:text-amber-200 transition-all text-xs font-mono group shadow-md shadow-amber-950/80 disabled:opacity-50 cursor-pointer whitespace-nowrap"
@@ -1569,8 +1581,8 @@ const App: React.FC = () => {
 
                 <div className={`
                     px-3 py-1.5 rounded-xl border text-[11px] font-mono uppercase tracking-wider flex items-center gap-2 shadow-sm
-                    ${stage !== ProcessingStage.IDLE 
-                        ? 'bg-indigo-900/20 border-indigo-500/40 text-indigo-300 animate-pulse' 
+                    ${stage !== ProcessingStage.IDLE
+                        ? 'bg-indigo-900/20 border-indigo-500/40 text-indigo-300 animate-pulse'
                         : 'bg-zinc-900/80 border-zinc-800 text-zinc-400'}
                 `}>
                     <div className={`w-2 h-2 rounded-full ${stage !== ProcessingStage.IDLE ? 'bg-indigo-400 shadow-[0_0_8px_rgba(129,140,248,0.8)]' : 'bg-emerald-500 shadow-[0_0_6px_rgba(16,185,129,0.8)]'}`}></div>
@@ -1600,19 +1612,19 @@ const App: React.FC = () => {
                         <p className="text-zinc-500 max-w-lg leading-relaxed text-sm md:text-base">
                             Vertical Infrastructure: Online.
                             <br/>
-                            Strata Linked: Bedrock + Lattice + Apex
+                            Layers linked: Context + Memory + Skill + Engine
                             <br/><br/>
                             <span className="font-mono text-xs text-emerald-400 uppercase tracking-widest bg-emerald-950/30 px-3 py-1.5 rounded border border-emerald-500/20">
-                                Awaiting Ascension
+                                Awaiting Input
                             </span>
                         </p>
                     </div>
                 ) : (
                     sessions[activeSessionId]?.messages.map((msg) => (
-                        <ChatMessage 
-                        key={msg.id} 
-                        message={msg} 
-                        onEdit={msg.role === 'user' ? handleEditMessage : undefined} 
+                        <ChatMessage
+                        key={msg.id}
+                        message={msg}
+                        onEdit={msg.role === 'user' ? handleEditMessage : undefined}
                         onViewMindMap={msg.isThinking ? handleOpenMindMap : undefined}
                         onPlayAudio={msg.role === 'model' && !msg.isThinking ? handlePlayMessageAudio : undefined}
                         isPlaying={isPlaying && audioSourceRef.current !== null}
@@ -1631,7 +1643,7 @@ const App: React.FC = () => {
                      <TerminalIcon size={10} className="text-zinc-500" />
                      <span className="text-[9px] text-zinc-500 uppercase">Omni Logs</span>
                  </div>
-                 <div 
+                 <div
                     ref={logsEndRef}
                     className="flex-1 overflow-y-auto p-2 space-y-1 text-[9px] scrollbar-hide"
                  >
@@ -1661,7 +1673,7 @@ const App: React.FC = () => {
             )}
 
             <div className="max-w-4xl mx-auto">
-                
+
                 {selectedFiles.length > 0 && (
                     <div className="flex gap-2 mb-3 overflow-x-auto scrollbar-hide">
                         {selectedFiles.map((file) => (
@@ -1677,7 +1689,7 @@ const App: React.FC = () => {
                                         )}
                                     </div>
                                     <span className="text-xs text-zinc-300 max-w-[120px] truncate font-mono">{file.name}</span>
-                                    <button 
+                                    <button
                                         type="button"
                                         onClick={() => removeFile(file.id)}
                                         className="p-1 hover:bg-red-500/20 hover:text-red-400 rounded text-zinc-500 transition ml-auto"
@@ -1687,8 +1699,8 @@ const App: React.FC = () => {
                                 </div>
                                 {file.status === 'loading' && (
                                     <div className="h-1 bg-zinc-800 w-full">
-                                        <div 
-                                            className="h-full bg-emerald-500 transition-all duration-300" 
+                                        <div
+                                            className="h-full bg-emerald-500 transition-all duration-300"
                                             style={{ width: `${file.progress}%` }}
                                         />
                                     </div>
@@ -1700,24 +1712,24 @@ const App: React.FC = () => {
 
                 <div className="relative group">
                     <div className={`absolute -inset-0.5 rounded-xl opacity-20 group-hover:opacity-50 blur transition duration-500 ${isRecording ? 'bg-red-500 animate-pulse' : 'bg-gradient-to-r from-purple-600 via-indigo-500 to-emerald-600'}`}></div>
-                    
-                    <form 
+
+                    <form
                         onSubmit={(e) => {
                             e.preventDefault();
                             handleSend();
                         }}
                         className="relative bg-[#09090b] rounded-xl flex items-center p-2 pr-4 border border-zinc-800 focus-within:border-emerald-900/50 transition-colors"
                     >
-                        
-                        <input 
-                            type="file" 
-                            multiple 
+
+                        <input
+                            type="file"
+                            multiple
                             ref={fileInputRef}
                             className="hidden"
                             onChange={handleFileSelect}
                         />
-                        
-                        <button 
+
+                        <button
                             type="button"
                             onClick={() => fileInputRef.current?.click()}
                             className="p-2 md:p-3 text-zinc-500 hover:text-emerald-400 transition rounded-lg hover:bg-zinc-900"
@@ -1726,7 +1738,7 @@ const App: React.FC = () => {
                             <Paperclip size={20} />
                         </button>
 
-                        <button 
+                        <button
                             type="button"
                             onClick={toggleRecording}
                             className={`p-2 md:p-3 transition rounded-lg hover:bg-zinc-900 ${isRecording ? 'text-red-500 animate-pulse' : 'text-zinc-500 hover:text-red-400'}`}
@@ -1737,12 +1749,12 @@ const App: React.FC = () => {
 
                         {/* 1. STANDALONE MODEL SELECTOR BUTTON & DROPDOWN */}
                         <div className="relative" ref={modelPickerRef}>
-                            <button 
+                            <button
                                 type="button"
                                 onClick={() => setIsModelPickerOpen(prev => !prev)}
                                 className={`flex items-center gap-1.5 px-2.5 py-1.5 md:px-3 md:py-2 transition rounded-xl border text-xs font-mono cursor-pointer ${
-                                    isModelPickerOpen 
-                                        ? 'bg-purple-950/90 border-purple-400 text-white shadow-md shadow-purple-950/50' 
+                                    isModelPickerOpen
+                                        ? 'bg-purple-950/90 border-purple-400 text-white shadow-md shadow-purple-950/50'
                                         : 'bg-zinc-900/90 border-zinc-800 text-zinc-300 hover:text-purple-300 hover:border-zinc-700'
                                 }`}
                                 title="اختر نموذج الذكاء الاصطناعي (Select AI Model)"
@@ -1756,7 +1768,7 @@ const App: React.FC = () => {
 
                             {isModelPickerOpen && (
                                 <>
-                                    <div 
+                                    <div
                                         className="fixed inset-0 z-40 bg-black/10 backdrop-blur-[1px] sm:bg-transparent"
                                         onClick={() => setIsModelPickerOpen(false)}
                                     />
@@ -1778,8 +1790,8 @@ const App: React.FC = () => {
                                                         addLog(`Active Model: ${model.name} (${model.modelNumber})`, 'core');
                                                     }}
                                                     className={`w-full flex items-center justify-between px-2.5 py-2 text-xs text-right rounded-xl transition-all cursor-pointer ${
-                                                        isSelected 
-                                                            ? 'bg-purple-950/80 border border-purple-500/60 text-white shadow-md shadow-purple-950/50' 
+                                                        isSelected
+                                                            ? 'bg-purple-950/80 border border-purple-500/60 text-white shadow-md shadow-purple-950/50'
                                                             : 'hover:bg-zinc-900 border border-transparent text-zinc-300'
                                                     }`}
                                                 >
@@ -1806,7 +1818,7 @@ const App: React.FC = () => {
                                                     </div>
                                                     {model.badge && (
                                                         <span className={`shrink-0 mr-1 text-[9px] font-mono font-bold px-1.5 py-0.5 rounded border ${
-                                                            isSelected 
+                                                            isSelected
                                                                 ? 'bg-purple-900/90 border-purple-400 text-purple-200'
                                                                 : 'bg-zinc-900 border-zinc-800 text-zinc-400'
                                                         }`}>
@@ -1823,31 +1835,31 @@ const App: React.FC = () => {
 
                         {/* 2. DISTINCTIVE FEATURES BUTTON (CYAN/TEAL FUTURISTIC CYBERNETIC EMBLEM - 100% SEPARATED FROM MODELS) */}
                         <div className="relative" ref={moreOptionsRef}>
-                            <button 
+                            <button
                                 type="button"
                                 onClick={() => setIsMoreOptionsOpen(prev => !prev)}
                                 className={`relative flex items-center justify-center p-2 md:p-2.5 transition-all duration-300 rounded-xl border cursor-pointer group ${
                                     isMoreOptionsOpen || isDeepManifestation || isWebSearchEnabled || isCanvasMode
-                                        ? 'bg-gradient-to-r from-teal-950/90 via-cyan-950/80 to-zinc-950 border-cyan-500/80 text-cyan-200 shadow-[0_0_22px_rgba(6,182,212,0.45)]' 
+                                        ? 'bg-gradient-to-r from-teal-950/90 via-cyan-950/80 to-zinc-950 border-cyan-500/80 text-cyan-200 shadow-[0_0_22px_rgba(6,182,212,0.45)]'
                                         : 'bg-zinc-900/90 border-zinc-800 text-zinc-300 hover:text-cyan-300 hover:border-cyan-500/60 hover:bg-zinc-900 shadow-sm'
                                 }`}
                                 title="المميزات والخيارات المتقدمة (Advanced Features & Options)"
                             >
                                 {/* Custom Cybernetic Futuristic Emblem */}
                                 <div className="relative flex items-center justify-center w-5 h-5 shrink-0">
-                                    <Hexagon 
-                                        size={20} 
+                                    <Hexagon
+                                        size={20}
                                         className={`transition-all duration-500 ${
                                             isMoreOptionsOpen || isDeepManifestation || isWebSearchEnabled || isCanvasMode
-                                                ? 'text-cyan-400 rotate-90 scale-105 filter drop-shadow-[0_0_8px_rgba(6,182,212,0.8)]' 
+                                                ? 'text-cyan-400 rotate-90 scale-105 filter drop-shadow-[0_0_8px_rgba(6,182,212,0.8)]'
                                                 : 'text-cyan-500/80 group-hover:rotate-45 group-hover:text-cyan-300'
-                                        }`} 
+                                        }`}
                                     />
-                                    <Aperture 
-                                        size={10} 
+                                    <Aperture
+                                        size={10}
                                         className={`absolute inset-0 m-auto transition-transform duration-500 ${
                                             isMoreOptionsOpen ? 'text-white rotate-180 scale-125' : 'text-cyan-200 group-hover:scale-110'
-                                        }`} 
+                                        }`}
                                     />
                                 </div>
 
@@ -1862,12 +1874,12 @@ const App: React.FC = () => {
                             {isMoreOptionsOpen && (
                                 <>
                                     {/* Backdrop overlay */}
-                                    <div 
+                                    <div
                                         className="fixed inset-0 z-40 bg-black/10 backdrop-blur-[1px] sm:bg-transparent"
                                         onClick={() => setIsMoreOptionsOpen(false)}
                                     />
                                     <div className="absolute bottom-full left-0 rtl:right-0 rtl:left-auto mb-2 w-72 sm:w-80 max-w-[calc(100vw-1.5rem)] max-h-[70vh] overflow-y-auto bg-zinc-950/98 backdrop-blur-2xl border border-cyan-500/40 rounded-2xl shadow-[0_10px_40px_rgba(0,0,0,0.95)] z-50 p-3 space-y-3 divide-y divide-zinc-800/80">
-                                        
+
                                         {/* Header */}
                                         <div className="flex items-center justify-between pb-1 text-xs font-bold text-cyan-300">
                                             <div className="flex items-center gap-2">
@@ -1885,7 +1897,7 @@ const App: React.FC = () => {
                                             <div className="text-[10px] font-mono text-cyan-400/80 uppercase tracking-wider font-bold text-right">
                                                 وضع التفكير والتأمل العميق
                                             </div>
-                                            
+
                                             <div className="grid grid-cols-2 gap-2">
                                                 {/* Option 1: التفكير العميق (Deep Thinking) */}
                                                 <button
@@ -1894,8 +1906,8 @@ const App: React.FC = () => {
                                                         setIsDeepManifestation(prev => !prev);
                                                     }}
                                                     className={`flex flex-col items-start gap-1 p-2.5 rounded-xl border text-right transition-all cursor-pointer ${
-                                                        isDeepManifestation 
-                                                            ? 'bg-cyan-950/80 border-cyan-500 text-cyan-200 shadow-md shadow-cyan-950/50' 
+                                                        isDeepManifestation
+                                                            ? 'bg-cyan-950/80 border-cyan-500 text-cyan-200 shadow-md shadow-cyan-950/50'
                                                             : 'bg-zinc-900/60 border-zinc-800 text-zinc-400 hover:bg-zinc-900 hover:text-zinc-200'
                                                     }`}
                                                 >
@@ -1916,8 +1928,8 @@ const App: React.FC = () => {
                                                         setIsDeepManifestation(prev => !prev);
                                                     }}
                                                     className={`flex flex-col items-start gap-1 p-2.5 rounded-xl border text-right transition-all cursor-pointer ${
-                                                        isDeepManifestation 
-                                                            ? 'bg-teal-950/80 border-teal-500 text-teal-200 shadow-md shadow-teal-950/50' 
+                                                        isDeepManifestation
+                                                            ? 'bg-teal-950/80 border-teal-500 text-teal-200 shadow-md shadow-teal-950/50'
                                                             : 'bg-zinc-900/60 border-zinc-800 text-zinc-400 hover:bg-zinc-900 hover:text-zinc-200'
                                                     }`}
                                                 >
@@ -1964,8 +1976,8 @@ const App: React.FC = () => {
                                                     setIsWebSearchEnabled(prev => !prev);
                                                 }}
                                                 className={`w-full flex items-center justify-between px-3 py-2 text-xs rounded-xl border transition-colors cursor-pointer ${
-                                                    isWebSearchEnabled 
-                                                        ? 'bg-blue-950/60 border-blue-500/60 text-blue-200' 
+                                                    isWebSearchEnabled
+                                                        ? 'bg-blue-950/60 border-blue-500/60 text-blue-200'
                                                         : 'bg-zinc-900/40 border-zinc-800/80 text-zinc-300 hover:bg-zinc-900'
                                                 }`}
                                             >
@@ -1985,8 +1997,8 @@ const App: React.FC = () => {
                                                     setIsMoreOptionsOpen(false);
                                                 }}
                                                 className={`w-full flex items-center justify-between px-3 py-2 text-xs rounded-xl border transition-colors cursor-pointer ${
-                                                    isCanvasMode 
-                                                        ? 'bg-emerald-950/60 border-emerald-500/60 text-emerald-200' 
+                                                    isCanvasMode
+                                                        ? 'bg-emerald-950/60 border-emerald-500/60 text-emerald-200'
                                                         : 'bg-zinc-900/40 border-zinc-800/80 text-zinc-300 hover:bg-zinc-900'
                                                 }`}
                                             >
@@ -2018,9 +2030,9 @@ const App: React.FC = () => {
                                 </>
                             )}
                         </div>
-                        
-                        <input 
-                            type="text" 
+
+                        <input
+                            type="text"
                             value={input}
                             onChange={(e) => setInput(e.target.value)}
                             placeholder={isRecording ? "Sonic Gate Open... Listening..." : "Collaborate with The Sovereign..."}
@@ -2028,17 +2040,17 @@ const App: React.FC = () => {
                             disabled={stage !== ProcessingStage.IDLE}
                             autoComplete="off"
                         />
-                        
+
                         <div className="flex items-center gap-2 pl-2 border-l border-zinc-800">
                              <span className="text-[10px] font-mono text-zinc-600 hidden md:inline-block">EXECUTE</span>
-                             <button 
+                             <button
                                 type="submit"
                                 id="send-message-btn"
                                 disabled={(!input.trim() && selectedFiles.length === 0) || stage !== ProcessingStage.IDLE || isAnyFileLoading}
                                 className={`
                                     w-10 h-10 rounded-lg flex items-center justify-center transition-all
                                     ${(input.trim() || selectedFiles.length > 0) && stage === ProcessingStage.IDLE && !isAnyFileLoading
-                                        ? 'bg-emerald-600 text-white shadow-[0_0_15px_rgba(16,185,129,0.5)] hover:bg-emerald-500' 
+                                        ? 'bg-emerald-600 text-white shadow-[0_0_15px_rgba(16,185,129,0.5)] hover:bg-emerald-500'
                                         : 'bg-zinc-800 text-zinc-600 cursor-not-allowed'}
                                 `}
                             >
@@ -2057,25 +2069,25 @@ const App: React.FC = () => {
         </div> {/* End of Main Content Area */}
 
         {/* Modals & Overlays */}
-        <AgentSuiteModal 
-          isOpen={showAgentSuiteModal} 
-          onClose={() => setShowAgentSuiteModal(false)} 
+        <AgentSuiteModal
+          isOpen={showAgentSuiteModal}
+          onClose={() => setShowAgentSuiteModal(false)}
         />
-        <PolymathMatrixModal 
-          isOpen={showPolymathModal} 
-          onClose={() => setShowPolymathModal(false)} 
+        <PolymathMatrixModal
+          isOpen={showPolymathModal}
+          onClose={() => setShowPolymathModal(false)}
         />
-        <IdeogramStudioModal 
-          isOpen={showIdeogramModal} 
-          onClose={() => setShowIdeogramModal(false)} 
+        <IdeogramStudioModal
+          isOpen={showIdeogramModal}
+          onClose={() => setShowIdeogramModal(false)}
         />
-        <NexusForgeModal 
-          isOpen={showNexusForgeModal} 
-          onClose={() => setShowNexusForgeModal(false)} 
+        <NexusForgeModal
+          isOpen={showNexusForgeModal}
+          onClose={() => setShowNexusForgeModal(false)}
         />
-        <MusicStudioModal 
-          isOpen={showMusicStudioModal} 
-          onClose={() => setShowMusicStudioModal(false)} 
+        <MusicStudioModal
+          isOpen={showMusicStudioModal}
+          onClose={() => setShowMusicStudioModal(false)}
           onSendToChat={(promptText) => {
             setSelectedModel('lyria-3-pro');
             setInput(promptText);
@@ -2117,7 +2129,7 @@ const App: React.FC = () => {
         <div className="hidden md:flex flex-col h-48 border-t border-zinc-800 bg-[#050505] p-4">
              <div className="flex justify-between items-center mb-2">
                  <h3 className="text-xs font-bold text-zinc-400 font-mono uppercase tracking-wider flex items-center gap-2">
-                    <Cpu size={12} /> Tesseract Map
+                    <Cpu size={12} /> Runtime Map
                  </h3>
                  <div className="flex gap-2">
                     <Activity size={12} className="text-zinc-600" />

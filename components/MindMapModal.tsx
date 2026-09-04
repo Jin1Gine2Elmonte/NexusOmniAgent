@@ -61,7 +61,7 @@ const MindMapModal: React.FC<MindMapModalProps> = ({ isOpen, onClose, thoughtCon
       });
 
       // 2. Parse Thought Content into "Fragments"
-      const lines = thoughtContent ? thoughtContent.split('\n').filter(l => l.trim().length > 3) : ["Initializing Archive...", "Scanning Ghost Paths...", "Accessing Sector 7..."];
+      const lines = thoughtContent ? thoughtContent.split('\n').filter(l => l.trim().length > 3) : ["Initializing Archive...", "Scanning Ghost Paths...", "Accessing Pale Archive..."];
       
       // Create chaotic distribution
       lines.slice(0, 40).forEach((line, i) => {
@@ -218,7 +218,7 @@ const MindMapModal: React.FC<MindMapModalProps> = ({ isOpen, onClose, thoughtCon
                        <Archive className="text-emerald-500" size={18} />
                        The Pale Archive
                    </h2>
-                   <span className="text-[10px] text-emerald-500/50 font-mono">SECTOR 7 // DEPTH: INFINITE</span>
+                   <span className="text-[10px] text-emerald-500/50 font-mono">PALE ARCHIVE // DEPTH: SILENT</span>
                </div>
                
                {/* Search Simulation */}

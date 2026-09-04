@@ -104,7 +104,7 @@ const NeuralGrid: React.FC<NeuralGridProps> = ({ stage }) => {
           ctx.fillRect(0, 0, width, height);
 
           // SHADOW MODE GLITCH EFFECT
-          if (stage === ProcessingStage.SINGULARITY_FOCUS || stage === ProcessingStage.REALITY_PROJECTION) {
+          if (stage === ProcessingStage.DEPTH_FOCUS || stage === ProcessingStage.RESPONSE_GENERATION) {
               if (Math.random() > 0.9) {
                   ctx.fillStyle = `rgba(0, 255, 100, ${Math.random() * 0.05})`;
                   ctx.fillRect(0, Math.random() * height, width, Math.random() * 20);
@@ -116,7 +116,7 @@ const NeuralGrid: React.FC<NeuralGridProps> = ({ stage }) => {
 
           // 1. RENDER: BEDROCK (Archive)
           const bedrockNodes = nodes.filter(n => n.layer === 'BEDROCK_ARCHIVE');
-          ctx.fillStyle = stage === ProcessingStage.PRISM_REFRACTION ? '#334155' : '#64748b'; // Dim during Prism
+          ctx.fillStyle = stage === ProcessingStage.VISUAL_SYNTHESIS ? '#334155' : '#64748b'; // Dim during visual synthesis
           
           bedrockNodes.forEach(node => {
               const driftX = Math.sin(tick * 0.002 + node.phase!) * 10;
@@ -125,7 +125,7 @@ const NeuralGrid: React.FC<NeuralGridProps> = ({ stage }) => {
               const y = node.y! * height + driftY;
               const size = (1 / node.z!) * 2.5;
               
-              const pulse = stage === ProcessingStage.LAYER_ASCENSION ? Math.sin(tick * 0.1 + node.phase!) : 0;
+              const pulse = stage === ProcessingStage.CONTEXT_ASCENSION ? Math.sin(tick * 0.1 + node.phase!) : 0;
               ctx.globalAlpha = Math.max(0, Math.min(1, node.intensity * 0.5 + pulse * 0.2));
               ctx.beginPath();
               ctx.arc(x, y, size, 0, Math.PI * 2);
@@ -139,7 +139,7 @@ const NeuralGrid: React.FC<NeuralGridProps> = ({ stage }) => {
           const rotationSpeed = stage === ProcessingStage.IDLE ? baseRotationSpeed : activeRotationSpeed;
           const currentRotation = tick * rotationSpeed;
           
-          if (stage !== ProcessingStage.IDLE && stage !== ProcessingStage.PRISM_REFRACTION) {
+          if (stage !== ProcessingStage.IDLE && stage !== ProcessingStage.VISUAL_SYNTHESIS) {
              ctx.strokeStyle = '#6366f1'; // Indigo
              ctx.lineWidth = 0.5;
              ctx.globalAlpha = 0.1;
@@ -168,7 +168,7 @@ const NeuralGrid: React.FC<NeuralGridProps> = ({ stage }) => {
              ctx.stroke();
           }
 
-          ctx.fillStyle = stage === ProcessingStage.PRISM_REFRACTION ? '#e879f9' : '#818cf8'; // Purple during Prism
+          ctx.fillStyle = stage === ProcessingStage.VISUAL_SYNTHESIS ? '#e879f9' : '#818cf8'; // Purple during visual synthesis
           quantumNodes.forEach(node => {
               const radius = 120;
               const rx = Math.cos(node.phase! + currentRotation) * radius;
@@ -191,13 +191,13 @@ const NeuralGrid: React.FC<NeuralGridProps> = ({ stage }) => {
           // 3. RENDER: APEX (Sovereign)
           const apexNodes = nodes.filter(n => n.layer === 'APEX_SOVEREIGN');
           const apexPulse = Math.sin(tick * 0.05) * 0.2 + 0.8;
-          ctx.fillStyle = stage === ProcessingStage.PRISM_REFRACTION ? '#f43f5e' : (stage === ProcessingStage.SINGULARITY_FOCUS ? '#ef4444' : '#10b981'); // Red/Pink during Prism, Intense Red during Singularity
+          ctx.fillStyle = stage === ProcessingStage.VISUAL_SYNTHESIS ? '#f43f5e' : (stage === ProcessingStage.DEPTH_FOCUS ? '#ef4444' : '#10b981'); // Red/Pink during visual synthesis, intense red during depth focus
           
           apexNodes.forEach(node => {
              let x = cx + Math.cos(tick * 0.05 + node.phase!) * 10;
              let y = (node.y! * height) + Math.sin(tick * 0.05 + node.phase!) * 5;
              
-             if (stage === ProcessingStage.SINGULARITY_FOCUS) {
+             if (stage === ProcessingStage.DEPTH_FOCUS) {
                  x += (Math.random() - 0.5) * 15;
                  y += (Math.random() - 0.5) * 15;
              }
@@ -209,7 +209,7 @@ const NeuralGrid: React.FC<NeuralGridProps> = ({ stage }) => {
           });
 
           // 4. RENDER: PRISM CORTEX (Visual Synthesis Mode)
-          if (stage === ProcessingStage.PRISM_REFRACTION) {
+          if (stage === ProcessingStage.VISUAL_SYNTHESIS) {
               const prismNodes = nodes.filter(n => n.layer === 'PRISM_CORTEX');
               
               // CMYK Split Effect
@@ -248,7 +248,7 @@ const NeuralGrid: React.FC<NeuralGridProps> = ({ stage }) => {
           // --- STANDARD ANIMATION STAGE EFFECTS ---
 
           // A. ASCENSION
-          if (stage === ProcessingStage.LAYER_ASCENSION || stage === ProcessingStage.HYPER_TESSERACT_SYNC) {
+          if (stage === ProcessingStage.CONTEXT_ASCENSION || stage === ProcessingStage.RUNTIME_SYNC) {
               ctx.globalCompositeOperation = 'screen';
               ctx.strokeStyle = 'rgba(129, 140, 248, 0.2)';
               ctx.lineWidth = 1;
@@ -264,7 +264,7 @@ const NeuralGrid: React.FC<NeuralGridProps> = ({ stage }) => {
 
           // B. FOCUS
           const apexY = 0.15 * height;
-          if (stage === ProcessingStage.SINGULARITY_FOCUS) {
+          if (stage === ProcessingStage.DEPTH_FOCUS) {
               ctx.globalCompositeOperation = 'lighter';
               ctx.strokeStyle = 'rgba(239, 68, 68, 0.6)'; // Intense Red
               ctx.lineWidth = 2;
@@ -292,7 +292,7 @@ const NeuralGrid: React.FC<NeuralGridProps> = ({ stage }) => {
           }
           
           // C. REALITY PROJECTION
-          if (stage === ProcessingStage.REALITY_PROJECTION) {
+          if (stage === ProcessingStage.RESPONSE_GENERATION) {
               ctx.fillStyle = 'rgba(255, 255, 255, 0.02)';
               ctx.fillRect(0, 0, width, height);
               
@@ -340,7 +340,7 @@ const NeuralGrid: React.FC<NeuralGridProps> = ({ stage }) => {
               <div className="flex items-center gap-1 text-[8px] text-zinc-500 font-mono">
                   <Cpu size={8} /> LATTICE
               </div>
-              <div className={`flex items-center gap-1 text-[8px] font-mono ${stage === ProcessingStage.PRISM_REFRACTION ? 'text-pink-500 font-bold' : 'text-zinc-500'}`}>
+              <div className={`flex items-center gap-1 text-[8px] font-mono ${stage === ProcessingStage.VISUAL_SYNTHESIS ? 'text-pink-500 font-bold' : 'text-zinc-500'}`}>
                   <Aperture size={8} /> PRISM
               </div>
           </div>
