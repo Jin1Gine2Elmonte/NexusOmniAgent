@@ -19,7 +19,7 @@ interface AgentCoreInfo {
   presets: string[];
   capabilities: string[];
   status: 'active' | 'standby' | 'processing';
-  planetarySpec: {
+  scaleSpec: {
     threads: number;
     memoryBus: string;
     throughput: string;
@@ -30,20 +30,20 @@ interface AgentCoreInfo {
 export const AgentSuiteModal: React.FC<AgentSuiteModalProps> = ({ isOpen, onClose }) => {
   const [selectedAgentId, setSelectedAgentId] = useState<string>('claw-cortex');
   const [customPrompt, setCustomPrompt] = useState<string>('');
-  const [allocatedThreads, setAllocatedThreads] = useState<number>(1024);
-  const [allocatedMemory, setAllocatedMemory] = useState<string>('1.0 TB Sovereign Matrix RAM');
-  const [executionDepth, setExecutionDepth] = useState<string>('Planetary Deep Recursive Execution');
-  const [isUnbounded, setIsUnbounded] = useState<boolean>(true);
+  const [allocatedThreads, setAllocatedThreads] = useState<number>(64);
+  const [allocatedMemory, setAllocatedMemory] = useState<string>('8 GB orchestration budget');
+  const [executionDepth, setExecutionDepth] = useState<string>('Structured Deep Execution');
+  const [isUnbounded, setIsUnbounded] = useState<boolean>(false);
 
   const [isExecuting, setIsExecuting] = useState<boolean>(false);
   const [isSynthesizing, setIsSynthesizing] = useState<boolean>(false);
   const [agentOutput, setAgentOutput] = useState<string>('');
   const [agentLogs, setAgentLogs] = useState<string[]>([
-    "[NEXUS::AgentOS Kernel]: 2048 Virtual Threads allocated across Sovereign Matrix Bus.",
-    "[NEXUS::ClawCortex]: Web crawling & infinite entity parsing pipeline armed at 1.0 TB RAM.",
-    "[NEXUS::HermesDirective]: Uncensored multi-agent logic chains armed at unlimited depth.",
-    "[NEXUS::OdysseusPath]: Strategic horizon milestone tracker synchronized with Pale Archive.",
-    "[NEXUS::Omniscience]: Planet-Scale cognitive matrix operational without artificial bounds."
+    "[NEXUS::AgentOS Kernel]: 128 parallel jobs ready across the orchestration bus.",
+    "[NEXUS::ClawCortex]: Web research & entity extraction pipeline armed at 8 GB orchestration budget.",
+    "[NEXUS::DirectiveCore]: Multi-agent logic chains armed with bounded reasoning depth.",
+    "[NEXUS::HorizonPath]: Strategic horizon milestone tracker synchronized with Pale Archive.",
+    "[NEXUS::Omniscience]: Nexus cognitive matrix operational with honest, bounded capacity."
   ]);
 
   const AGENTS: AgentCoreInfo[] = [
@@ -51,11 +51,11 @@ export const AgentSuiteModal: React.FC<AgentSuiteModalProps> = ({ isOpen, onClos
       id: 'claw-cortex',
       originalName: 'OpenClaw',
       nexusName: 'NEXUS::ClawCortex',
-      arabicName: 'مستخلص البيانات الفائق والتنقيب الحر - النواة الكوكبية',
+      arabicName: 'مستخلص البيانات الفائق والتنقيب الحر',
       icon: Globe,
       color: 'from-cyan-500 to-blue-600',
       badge: 'Deep Web Intelligence',
-      description: 'ذراع الاستخلاص الذاتي والتنقيب الكوكبي على الويب. يتيح لـ نيكسوس استخراج البيانات الجسيمة والجداول والهياكل التنظيمية من أعمق طبقات الشبكة وحقنها في الأرشيف.',
+      description: 'ذراع الاستخلاص والتنقيب على الويب. يتيح لـ نيكسوس استخراج البيانات والجداول والهياكل التنظيمية من الشبكة وحقنها في الأرشيف ضمن حدود صريحة.',
       presets: [
         'استخرج الجدول والبيانات الرئيسية الهيكلية من الرابط مع بناء JSON Schema كامل',
         'قم بالتنقيب عن أحدث المستجدات التقنية في مجال الذكاء الاصطناعي ونسقها في جدول موسع',
@@ -68,50 +68,50 @@ export const AgentSuiteModal: React.FC<AgentSuiteModalProps> = ({ isOpen, onClos
         'Exhaustive JSON Schema Auto-Generation'
       ],
       status: 'active',
-      planetarySpec: {
-        threads: 1024,
-        memoryBus: '1.0 TB Sovereign Matrix RAM',
-        throughput: '124,000 Entities / sec',
-        horizon: 'Infinite Recursive DOM Crawl'
+      scaleSpec: {
+        threads: 64,
+        memoryBus: '8 GB orchestration budget',
+        throughput: 'Structured extraction queue',
+        horizon: 'Per-domain crawl cycle'
       }
     },
     {
-      id: 'hermes-directive',
-      originalName: 'Nous Hermes 3',
-      nexusName: 'NEXUS::HermesDirective',
-      arabicName: 'المحرك التكيفي المستقل وغير المقيد - النواة الكوكبية',
+      id: 'directive-core',
+      originalName: 'Directive Core',
+      nexusName: 'NEXUS::DirectiveCore',
+      arabicName: 'المحرك التكيفي المستقل والتوجيهي',
       icon: Zap,
       color: 'from-amber-500 to-orange-600',
-      badge: 'Uncensored Multi-Agent Reasoner',
-      description: 'محرك التفكير والتوجيه متعدد الوكلاء غير المقيد. ينفذ الاستدعاء الوظيفي (Function Calling) والتسلسل المنطقي المعقد بحرية مطلقة ودون قيود إدراكية أو تحيزات.',
+      badge: 'Multi-Agent Reasoner',
+      description: 'محرك التفكير والتوجيه متعدد الوكلاء ضمن حدود صريحة. ينفذ الاستدعاء الوظيفي والتسلسل المنطقي المعقد بشفافية وحدود أمان واضحة.',
       presets: [
         'قم بصياغة منطق متعدد الوكلاء لحل هذه المعضلة البرمجية العميقة...',
         'توليد استدعاء وظائف JSON معقد مع التحقق من الحالات الحدية الصعبة',
         'تحليل الموقف المنطقي بعمق استدلالي خالص بدون أي تحيز أو قيود'
       ],
       capabilities: [
-        'Uncensored Multi-Agent Infinite Logic Chains',
+        'Multi-Agent Logic Chains',
         'Complex Tool & Parallel Function Calling Resolution',
-        'Exhaustive Structural JSON Output Synthesis',
-        'Dynamic Persona & Universal Rule Adaptability'
+        'Structural JSON Output Synthesis',
+        'Rule Adaptability within Explicit Boundaries'
       ],
       status: 'active',
-      planetarySpec: {
-        threads: 2048,
-        memoryBus: '2.5 TB Uncensored Reasoning RAM',
-        throughput: '85,000 Logical Tokens / sec',
-        horizon: 'Unlimited Recursion Depth'
+      scaleSpec: {
+        threads: 96,
+        memoryBus: '12 GB orchestration budget',
+        throughput: 'Bounded reasoner queue',
+        horizon: 'Bounded reasoning depth'
       }
     },
     {
-      id: 'odysseus-path',
-      originalName: 'Odysseus',
-      nexusName: 'NEXUS::OdysseusPath',
-      arabicName: 'ملاح المسارات الاستراتيجية طويلة المدى - النواة الكوكبية',
+      id: 'horizon-path',
+      originalName: 'Horizon Path',
+      nexusName: 'NEXUS::HorizonPath',
+      arabicName: 'ملاح المسارات الاستراتيجية طويلة المدى',
       icon: Compass,
       color: 'from-emerald-500 to-teal-600',
       badge: 'Strategic Long-Horizon Planner',
-      description: 'ملاح المسارات الاستراتيجية للمهام الكبرى. يفكك الأهداف المعقدة والخطط طويلة المدى إلى مراحل تنفيذية، ويتتبع نقاط الإنجاز، ويطبق استراتيجيات الإصلاح والتكيف.',
+      description: 'ملاح المسارات الاستراتيجية. يفكك الأهداف المعقدة والخطط طويلة المدى إلى مراحل تنفيذية، ويتتبع نقاط الإنجاز، ويطبق استراتيجيات الإصلاح والتكيف.',
       presets: [
         'ابنِ خطة عمل استراتيجية طويلة المدى لتطوير نظام عالمي معقد...',
         'تفكيك الهدف الكبير إلى 10 مراحل متسلسلة مع تقييم متتقدم للمخاطر',
@@ -121,49 +121,49 @@ export const AgentSuiteModal: React.FC<AgentSuiteModalProps> = ({ isOpen, onClos
         'Long-Horizon Multi-Step Task Decomposition',
         'Self-Healing Error Loops & Dynamic Vector Re-routing',
         'Exhaustive Goal Verification & Milestone Topologies',
-        'Cross-Session Infinite Horizon Persistence'
+        'Cross-Session Persistence'
       ],
       status: 'active',
-      planetarySpec: {
-        threads: 512,
-        memoryBus: '512 GB Horizon Memory Bank',
-        throughput: '45,000 Milestones / sec',
-        horizon: 'Multi-Year Strategic Vector'
+      scaleSpec: {
+        threads: 48,
+        memoryBus: '6 GB orchestration budget',
+        throughput: 'Milestone queue',
+        horizon: 'Quarterly planning horizon'
       }
     },
     {
       id: 'agent-os-kernel',
       originalName: 'Agent OS',
       nexusName: 'NEXUS::AgentOS Kernel',
-      arabicName: 'نواة إدارة الخيوط والأنظمة الموزعة - النواة الكوكبية',
+      arabicName: 'نواة إدارة الخيوط والأنظمة الموزعة',
       icon: Cpu,
       color: 'from-purple-500 to-indigo-600',
       badge: 'Sub-Agent Runtime Kernel',
-      description: 'النواة الحاكمة وبيئة تشغيل العمليات الفرعية الموزعة. تدير جدولة خيوط المعالجة الكوكبية، وتوزيع الذاكرة، وربط النموذج المحلي بمحرك نيكسوس.',
+      description: 'النواة الحاكمة وبيئة تشغيل العمليات الفرعية الموزعة. تدير جدولة خيوط المعالجة المتوازية، وتوزيع الذاكرة، وربط النموذج المحلي بمحرك نيكسوس.',
       presets: [
-        'قم بفحص حالة 4096 خيط معالجة والذاكرة المخصصة للوكلاء',
+        'قم بفحص حالة 128 وظيفة والذاكرة المخصصة للوكلاء',
         'جدولة عمليات معالجة متوازية بين النواة المحلية والسحابية',
         'مزامنة ناقل الذاكرة الافتراضية للسيادة مع الأرشيف الباهت'
       ],
       capabilities: [
-        'Parallel Sub-Agent Thread Orchestration (Up to 4096 Threads)',
+        'Parallel Sub-Agent Orchestration (Up to 128 Jobs)',
         'Local Engine (llama-server / Qwen) Bus Bridge',
         'System Sandbox & Low-Level Process Management',
-        'Real-time Memory & High-Throughput CPU Allocator'
+        'Memory & CPU Allocator'
       ],
       status: 'active',
-      planetarySpec: {
-        threads: 4096,
-        memoryBus: 'Unlimited Tesseract Bus Memory',
-        throughput: '500,000 Ops / sec',
-        horizon: 'Kernel Runtime Real-Time'
+      scaleSpec: {
+        threads: 128,
+        memoryBus: '16 GB orchestration budget',
+        throughput: 'Scheduler queue',
+        horizon: 'Kernel runtime tick'
       }
     },
     {
       id: 'mcp-bridge',
       originalName: 'Model Context Protocol (MCP)',
       nexusName: 'NEXUS::MCP Bridge',
-      arabicName: 'بروتوكول سياق النموذج وجسر الاتصال الديناميكي - النواة الكوكبية',
+      arabicName: 'بروتوكول سياق النموذج وجسر الاتصال الديناميكي',
       icon: Server,
       color: 'from-pink-500 to-rose-600',
       badge: 'Anthropic MCP Protocol',
@@ -180,11 +180,11 @@ export const AgentSuiteModal: React.FC<AgentSuiteModalProps> = ({ isOpen, onClos
         'Zero-Latency Context Injection & Memory Bus Interop'
       ],
       status: 'active',
-      planetarySpec: {
-        threads: 1024,
-        memoryBus: '512 GB Protocol Context Bus',
-        throughput: '250,000 Messages / sec',
-        horizon: 'STDIO / SSE Real-time Pipe'
+      scaleSpec: {
+        threads: 64,
+        memoryBus: '8 GB orchestration budget',
+        throughput: 'Message bus queue',
+        horizon: 'STDIO / SSE live pipe'
       }
     }
   ];
@@ -199,7 +199,7 @@ export const AgentSuiteModal: React.FC<AgentSuiteModalProps> = ({ isOpen, onClos
     setAgentOutput('');
     
     const timestamp = new Date().toLocaleTimeString();
-    setAgentLogs(prev => [...prev, `[${timestamp}] [${selectedAgent.nexusName}]: Allocating ${allocatedThreads} Virtual Threads & ${allocatedMemory}...`]);
+    setAgentLogs(prev => [...prev, `[${timestamp}] [${selectedAgent.nexusName}]: Allocating  parallel jobs & ...`]);
 
     try {
       const response = await fetch('/api/agent-os/execute', {
@@ -220,8 +220,8 @@ export const AgentSuiteModal: React.FC<AgentSuiteModalProps> = ({ isOpen, onClos
       }
 
       const data = await response.json();
-      setAgentOutput(data.result || "Planetary execution completed successfully.");
-      setAgentLogs(prev => [...prev, `[${new Date().toLocaleTimeString()}] [${selectedAgent.nexusName}]: Planetary task executed & memory bus updated.`]);
+      setAgentOutput(data.result || "Execution completed successfully.");
+      setAgentLogs(prev => [...prev, `[${new Date().toLocaleTimeString()}] [${selectedAgent.nexusName}]: Task executed & orchestration bus updated.`]);
     } catch (err: any) {
       setAgentOutput(`[ERROR]: ${err?.message || "Failed to execute sub-agent task."}`);
       setAgentLogs(prev => [...prev, `[${new Date().toLocaleTimeString()}] [${selectedAgent.nexusName}]: Execution error.`]);
@@ -237,7 +237,7 @@ export const AgentSuiteModal: React.FC<AgentSuiteModalProps> = ({ isOpen, onClos
     setAgentOutput('');
     
     const timestamp = new Date().toLocaleTimeString();
-    setAgentLogs(prev => [...prev, `[${timestamp}] [PLANETARY MATRIX]: Launching simultaneous 4-Core Unconstrained Synthesis...`]);
+    setAgentLogs(prev => [...prev, `[${timestamp}] [NEXUS MATRIX]: Launching simultaneous 4-Core Bounded Synthesis...`]);
 
     try {
       const response = await fetch('/api/agent-os/synthesize', {
@@ -254,11 +254,11 @@ export const AgentSuiteModal: React.FC<AgentSuiteModalProps> = ({ isOpen, onClos
       }
 
       const data = await response.json();
-      setAgentOutput(data.synthesis || "Planetary synthesis completed.");
-      setAgentLogs(prev => [...prev, `[${new Date().toLocaleTimeString()}] [PLANETARY MATRIX]: 4 Cores synthesized into NEXUS Omniscience.`]);
+      setAgentOutput(data.synthesis || "Synthesis completed.");
+      setAgentLogs(prev => [...prev, `[${new Date().toLocaleTimeString()}] [NEXUS MATRIX]: 4 Cores synthesized into NEXUS Omniscience.`]);
     } catch (err: any) {
       setAgentOutput(`[ERROR]: ${err?.message || "Failed to synthesize matrix."}`);
-      setAgentLogs(prev => [...prev, `[${new Date().toLocaleTimeString()}] [PLANETARY MATRIX]: Synthesis failed.`]);
+      setAgentLogs(prev => [...prev, `[${new Date().toLocaleTimeString()}] [NEXUS MATRIX]: Synthesis failed.`]);
     } finally {
       setIsSynthesizing(false);
     }
@@ -279,14 +279,14 @@ export const AgentSuiteModal: React.FC<AgentSuiteModalProps> = ({ isOpen, onClos
             <div>
               <div className="flex items-center gap-2">
                 <h2 className="text-cyan-400 font-mono text-base uppercase tracking-widest font-bold">
-                  NEXUS::AGENT OS MATRIX (PLANET-SCALE ENGINE)
+                  NEXUS::AGENT OS MATRIX (BOUNDED ORCHESTRATION)
                 </h2>
                 <span className="px-2 py-0.5 text-[9px] font-mono bg-cyan-950/80 border border-cyan-500/40 text-cyan-300 rounded font-bold uppercase">
-                  UNCONSTRAINED PLANETARY CAPACITY
+                  BOUNDED ORCHESTRATION CAPACITY
                 </span>
               </div>
               <p className="text-xs text-zinc-400 font-mono mt-0.5">
-                الأدوات والوكلاء ليسوا برامج صغيرة بل هم الجوارح والمحركات التنفيذية الحجمية المفتوحة داخل عقل نيكسوس السيادي
+                الأدوات والوكلاء محركات تنفيذية حقيقية داخل عقل نيكسوس، تعمل ضمن حدود تشغيلية صريحة لا تدّعي سعة كوكبية
               </p>
             </div>
           </div>
@@ -316,8 +316,8 @@ export const AgentSuiteModal: React.FC<AgentSuiteModalProps> = ({ isOpen, onClos
                   key={agent.id}
                   onClick={() => {
                     setSelectedAgentId(agent.id);
-                    setAllocatedThreads(agent.planetarySpec.threads);
-                    setAllocatedMemory(agent.planetarySpec.memoryBus);
+                    setAllocatedThreads(agent.scaleSpec.threads);
+                    setAllocatedMemory(agent.scaleSpec.memoryBus);
                     setAgentOutput('');
                   }}
                   className={`w-full text-right p-3.5 rounded-xl border transition-all flex flex-col gap-2 ${
@@ -337,7 +337,7 @@ export const AgentSuiteModal: React.FC<AgentSuiteModalProps> = ({ isOpen, onClos
                     </div>
                     <span className="text-[9px] font-mono px-1.5 py-0.5 bg-emerald-950/60 text-emerald-400 border border-emerald-500/30 rounded flex items-center gap-1">
                       <span className="w-1 h-1 bg-emerald-400 rounded-full animate-ping" />
-                      {agent.planetarySpec.threads} Threads
+                      {agent.scaleSpec.threads} Threads
                     </span>
                   </div>
 
@@ -346,33 +346,33 @@ export const AgentSuiteModal: React.FC<AgentSuiteModalProps> = ({ isOpen, onClos
                   </p>
 
                   <div className="flex items-center justify-between pt-1 border-t border-zinc-800/40 text-[9px] font-mono text-zinc-500">
-                    <span>الذاكرة: <span className="text-cyan-400/80">{agent.planetarySpec.memoryBus}</span></span>
-                    <span className="text-amber-400 font-bold">{agent.planetarySpec.throughput}</span>
+                    <span>الذاكرة: <span className="text-cyan-400/80">{agent.scaleSpec.memoryBus}</span></span>
+                    <span className="text-amber-400 font-bold">{agent.scaleSpec.throughput}</span>
                   </div>
                 </button>
               );
             })}
 
-            {/* Quick Planet Scale Controls */}
+            {/* Quick Orchestration Controls */}
             <div className="mt-4 p-3 bg-cyan-950/20 border border-cyan-500/20 rounded-xl space-y-3">
               <div className="flex items-center gap-2 text-xs text-cyan-300 font-mono font-bold">
                 <Sliders size={14} className="text-cyan-400" />
-                تكوين السعة الكوكبية (Capacity Config)
+                تكوين السعة التشغيلية (Capacity Config)
               </div>
               
               <div className="space-y-2 text-[10px] font-mono">
                 <div>
-                  <span className="text-zinc-400 block mb-1">الخيوط الافتراضية (Virtual Threads):</span>
+                  <span className="text-zinc-400 block mb-1">الوظائف المتوازية (Parallel Jobs):</span>
                   <select 
                     value={allocatedThreads} 
                     onChange={(e) => setAllocatedThreads(Number(e.target.value))}
                     className="w-full bg-zinc-950 border border-zinc-800 text-cyan-300 p-1.5 rounded outline-none"
                   >
-                    <option value={256}>256 Virtual Threads</option>
-                    <option value={512}>512 Virtual Threads</option>
-                    <option value={1024}>1024 Virtual Threads (Standard)</option>
-                    <option value={2048}>2048 Virtual Threads (Planet Scale)</option>
-                    <option value={4096}>4096 Virtual Threads (Tesseract Max)</option>
+                    <option value={16}>16 Parallel Jobs</option>
+                    <option value={32}>32 Parallel Jobs</option>
+                    <option value={64}>64 Parallel Jobs (Standard)</option>
+                    <option value={96}>96 Parallel Jobs</option>
+                    <option value={128}>128 Parallel Jobs (Max)</option>
                   </select>
                 </div>
 
@@ -384,8 +384,8 @@ export const AgentSuiteModal: React.FC<AgentSuiteModalProps> = ({ isOpen, onClos
                     className="w-full bg-zinc-950 border border-zinc-800 text-cyan-300 p-1.5 rounded outline-none"
                   >
                     <option value="Standard Deep Execution">Standard Deep Execution</option>
-                    <option value="Planetary Deep Recursive Execution">Planetary Deep Recursive Execution</option>
-                    <option value="Unconstrained Infinite Synthesis">Unconstrained Infinite Synthesis</option>
+                    <option value="Structured Deep Execution">Structured Deep Execution</option>
+                    <option value="Bounded Synthesis">Bounded Synthesis</option>
                   </select>
                 </div>
               </div>
@@ -434,11 +434,11 @@ export const AgentSuiteModal: React.FC<AgentSuiteModalProps> = ({ isOpen, onClos
                 </div>
                 <div className="p-2 bg-zinc-950 rounded-lg border border-zinc-800">
                   <span className="text-zinc-500 block">معدل المعالجة:</span>
-                  <span className="text-amber-400 font-bold">{selectedAgent.planetarySpec.throughput}</span>
+                  <span className="text-amber-400 font-bold">{selectedAgent.scaleSpec.throughput}</span>
                 </div>
                 <div className="p-2 bg-zinc-950 rounded-lg border border-zinc-800">
                   <span className="text-zinc-500 block">عمق الأفق:</span>
-                  <span className="text-purple-400 font-bold">{selectedAgent.planetarySpec.horizon}</span>
+                  <span className="text-purple-400 font-bold">{selectedAgent.scaleSpec.horizon}</span>
                 </div>
               </div>
 
@@ -466,7 +466,7 @@ export const AgentSuiteModal: React.FC<AgentSuiteModalProps> = ({ isOpen, onClos
               {/* Capabilities Grid */}
               <div className="space-y-1.5 pt-2 border-t border-zinc-800/60">
                 <span className="text-[10px] font-mono uppercase text-zinc-500 tracking-wider font-semibold">
-                  قدرات النواة التنفيذية الكوكبية:
+                  قدرات النواة التنفيذية:
                 </span>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                   {selectedAgent.capabilities.map((cap, idx) => (
@@ -479,14 +479,14 @@ export const AgentSuiteModal: React.FC<AgentSuiteModalProps> = ({ isOpen, onClos
               </div>
             </div>
 
-            {/* Direct Execution & Planet Matrix Console */}
+            {/* Direct Execution & Bounded Orchestration Console */}
             <div className="space-y-3 flex-1 flex flex-col">
               <div className="flex items-center justify-between text-xs font-mono">
                 <span className="text-zinc-300 font-bold flex items-center gap-2">
                   <Terminal size={14} className="text-cyan-400" />
                   Execution & Orchestration Hub [{selectedAgent.nexusName}]
                 </span>
-                <span className="text-[10px] text-zinc-500">Planet-Scale Unconstrained Mode</span>
+                <span className="text-[10px] text-zinc-500">Bounded Orchestration Mode</span>
               </div>
 
               <div className="flex flex-col sm:flex-row gap-2">
@@ -495,7 +495,7 @@ export const AgentSuiteModal: React.FC<AgentSuiteModalProps> = ({ isOpen, onClos
                   value={customPrompt}
                   onChange={(e) => setCustomPrompt(e.target.value)}
                   onKeyDown={(e) => e.key === 'Enter' && handleRunTask()}
-                  placeholder={`أدخل التعليمات لـ ${selectedAgent.nexusName} بأي حجم وعمق تقني تريد...`}
+                  placeholder={`أدخل التعليمات لـ ${selectedAgent.nexusName} ضمن حدود تشغيلية صريحة...`}
                   className="flex-1 bg-zinc-950 border border-zinc-800 focus:border-cyan-500/60 rounded-xl px-3.5 py-2.5 text-xs text-zinc-200 font-mono placeholder:text-zinc-600 outline-none transition-colors"
                 />
                 
@@ -556,7 +556,7 @@ export const AgentSuiteModal: React.FC<AgentSuiteModalProps> = ({ isOpen, onClos
         <div className="p-3 bg-zinc-950 border-t border-zinc-800 flex items-center justify-between font-mono text-xs text-zinc-400">
           <div className="flex items-center gap-2">
             <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse" />
-            <span className="text-[11px]">4 Sovereign Sub-Agent Cores integrated into NEXUS Planet-Scale Architecture</span>
+            <span className="text-[11px]">4 Sovereign Sub-Agent Cores integrated into NEXUS Bounded Orchestration</span>
           </div>
           <button
             onClick={onClose}

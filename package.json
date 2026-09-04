@@ -8,7 +8,12 @@
     "build": "vite build && esbuild server.ts --bundle --platform=node --format=cjs --packages=external --sourcemap --outfile=dist/server.cjs",
     "preview": "vite preview",
     "lint": "tsc --noEmit",
-    "start": "node dist/server.cjs"
+    "start": "node dist/server.cjs",
+    "verify:runtime": "tsx scripts/verify_runtime_path.ts",
+    "verify:fold": "tsx scripts/verify_latent_fold.ts",
+    "verify:forge": "tsx scripts/verify_nexus_forge.ts",
+    "verify:legend": "tsx scripts/verify_legend_engine.ts",
+    "verify:ops": "tsx scripts/verify_nexus_ops.ts"
   },
   "dependencies": {
     "@google/genai": "^1.30.0",

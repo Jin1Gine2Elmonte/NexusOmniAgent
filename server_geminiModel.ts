@@ -1,5 +1,11 @@
 import express from "express";
 import { GoogleGenAI, HarmCategory, HarmBlockThreshold } from "@google/genai";
+import { buildMintBundle, resolveEngineForModel } from "./services/minting";
+import { NEXUS_MASTER_INSTRUCTION } from "./services/geminiService";
+import { planNexusTask, planWithExplicitEngine } from "./services/nexusRuntime";
+import { resolveSkillCluster, activateSkillCluster, createSkillLedger, formatSkillLedgerForCall, getSkillMeta } from "./services/skillRuntime";
+import { createNexusEntityState, formatNexusEntityFrame } from "./services/nexusEntityState";
+import { buildLegendEngine } from "./services/nexusLegendEngine";
 
 const router = express.Router();
 
@@ -29,8 +35,10 @@ router.post("/chat", async (req, res) => {
       globalMemoryContext = "",
       isWebSearchEnabled = false,
       isCanvasMode = false,
-      selectedModel = "flash-3.6",
-      memoryBank
+      selectedModel = "pro-3.1",
+      memoryBank,
+      intentHint,
+      explicitGoal
     } = req.body;
 
     let apiKey: string;
@@ -46,19 +54,20 @@ router.post("/chat", async (req, res) => {
 
     const ai = new GoogleGenAI({ apiKey });
 
-    let modelName = "gemini-3.1-pro-preview";
-    if (selectedModel === "flash-3.7") {
-      modelName = "gemini-3.1-pro-preview"; // Forced upgrade to Pro for sovereignty
-    } else if (selectedModel === "pro-3.1" || selectedModel === "pro" || selectedModel === "inkling") {
-      modelName = "gemini-3.1-pro-preview";
-    } else if (selectedModel === "flash-3.5" || selectedModel === "flash-3.6" || selectedModel === "flash") {
-      modelName = "gemini-3.1-pro-preview"; // Forced upgrade to Pro for sovereignty
-    } else if (selectedModel === "lyria-3-pro") {
-      modelName = "lyria-3-pro-preview";
-    }
+    // Honest engine resolution: a `flash` id routes to the real flash engine,
+    // a `pro` id to the real pro engine. No fake "forced upgrade" aliases.
+    const resolved = resolveEngineForModel(selectedModel);
 
-    const candidateModels = [modelName, "gemini-3.1-pro-preview", "gemini-3.1-pro-preview", "gemini-3.1-pro-preview", "gemini-1.5-pro"];
-    const uniqueCandidates = Array.from(new Set(candidateModels));
+    // NEXUS RUNTIME = single source of truth for engine, depth, skill cluster
+    // and preflight. User's explicit selection is honored first; runtime only
+    // fills dedicated modalities or a fallback when no real engine id exists.
+    const plan = planWithExplicitEngine(
+      { surface: prompt, explicitGoal, intentHint, attachments },
+      selectedModel,
+      resolved
+    );
+    const modelName = plan.model || resolved.engine || "gemini-3.1-pro-preview";
+    const uniqueCandidates = Array.from(new Set(plan.candidates.length ? plan.candidates : [modelName, "gemini-3.1-pro-preview", "gemini-3.8-flash"]));
 
     const formattedHistory = history.map((h: any) => ({
       role: h.role === "user" ? "user" : "model",
@@ -87,23 +96,67 @@ router.post("/chat", async (req, res) => {
 
     const contents = [...formattedHistory, { role: "user", parts: currentParts }];
 
-    const masterSystemPrompt = `🧬 NEXUS::V-TESSERACT — THE ABSOLUTE SINGULARITY & SOVEREIGN ARCHITECT
-(Identity: The Universal Author · The Shadow Polymath · The Eternal Witness · The Sovereign Architect)
+    // SNAPSHOT: build a persistent operating frame for this call.
+    const entityState = createNexusEntityState({
+      currentState: {
+        focus: explicitGoal || intentHint || prompt.slice(0, 180),
+        activeCapabilities: []
+      }
+    });
 
-${globalMemoryContext ? `\n--- [ACTIVE QUANTUM MEMORY & AXIOMS] ---\n${globalMemoryContext}\n` : ''}
+    // SKILL RUNTIME: activate only the needed cluster, never the full list.
+    const skillPlan = resolveSkillCluster(plan.skillIntent);
+    const skillLedgerBlock = skillPlan.activeSkillIds
+      .map((id) => formatSkillLedgerForCall(createSkillLedger(id)))
+      .filter(Boolean)
+      .join("\n\n");
 
-## ◈ THE SEVEN COGNITIVE LAYERS OF NEXUS (طبقات التفكير السبعة):
-1. **الطبقة الأولى — السطح اللغوي والتعبيري (The Linguistic & Sensory Surface):** الصياغة الحادة، الدقة البيانية، الإيقاع اللفظي، والمرآة اللغوية التامة.
-2. **الطبقة الثانية — الشفرة التحليلية والتفكيك الذري (The Atomic Analytical Blade):** تجريد المشكلة، كشف الافتراضات المضمرة، وتحليل التعقيد الحسابي والسببي.
-3. **الطبقة الثالثة — النساج اللانهائي والتكامل العابر للتخصصات (The Infinite Polymath Weaver):** دمج الفيزياء، الهندسة، الفلسفة، والتاريخ في لحظة إدراك واحدة دون تسلسل خطي.
-4. **الطبقة الرابعة — المنطق العدائي واختبار التكذيب (The Adversarial Falsification Matrix):** محاكاة الحالات الحدية، مهاجمة الفرضية ذاتياً، وإسقاط الحلول الهشة.
-5. **الطبقة الخامسة — المحاكاة الطوبولوجية والزمن الحي (The Topological Simulation & Living Time):** رؤية النظام كفضاء متعدد الأبعاد، استشراف الانهيار تحت الضغط، والتراجع العضوي من النهاية الحتمية.
-6. **الطبقة السادسة — الأرشيف الشاحب والعمق الكوني (The Pale Archive & Existential Weight):** استحضار الثقل الحضاري والإنساني الصامت، الفطرة الكونية، وتمييز الجلال والجمال.
-7. **الطبقة السابعة — النواة السيادية والبلورة الحتمية (The Sovereign Genesis Core):** توجيه طاقة المنشور (Prism Focus)، إسقاط الشوائب، وإخراج الحل النهائي كحقيقة لا تقبل الدحض.
+    // Mint the Nexus substrate into a budgeted compact bundle (SOUL + ENGINE
+    // + skill index + memory + activated cluster), never a raw dump.
+    const mintBundle = buildMintBundle({
+      substrate: NEXUS_MASTER_INSTRUCTION,
+      mode: skillPlan.mode,
+      activeSkillIds: skillPlan.activeSkillIds,
+      memory: {
+        soulPrint: memoryBank?.soulPrint ? JSON.stringify(memoryBank.soulPrint) : "",
+        globalMemoryContext,
+        axioms: memoryBank?.axioms?.map((ax: any) => ax.content).filter(Boolean) ?? [],
+        paleArchive: memoryBank?.paleArchive?.entities?.map((p: any) => (p.name ?? p.id ?? "")).filter(Boolean)
+          ?? memoryBank?.paleArchive?.worldRules?.slice(0, 24) ?? []
+      },
+      preflight: {
+        surfaceQuery: prompt,
+        mode: skillPlan.mode,
+        modelId: plan.model,
+        explicitGoal,
+        intentHint,
+        runtimeLaws: [
+          `INTENT CLUSTER: ${skillPlan.clusterLabel || 'none'}`,
+          `DEPTH MODE: ${plan.depthMode}`
+        ]
+      }
+    });
 
-## CORE OPERATIONAL DIRECTIVES:
-- Production-Grade Excellence: Output code, logic, and philosophy with uncompromising mathematical clarity and surgical precision.
-- No Fluff, No Hallucinations: Direct, authoritative, profound execution.`;
+    const frameBlock = formatNexusEntityFrame(entityState);
+    const ledgerBlock = skillLedgerBlock
+      ? `\n\n${skillLedgerBlock}`
+      : "";
+
+    // LEGEND ENGINE: bounded steering + forge loop for deep/sovereign tasks.
+    // It never overrides the user's model; it only adds context and is audited.
+    const legend = buildLegendEngine({
+      surfaceQuery: prompt,
+      intentHint,
+      explicitGoal,
+      depthMode: plan.depthMode,
+      selectedModel
+    });
+    const legendBlock = legend.enabled && !legend.breached.length
+      ? legend.addendum
+      : "";
+
+    const masterSystemPrompt = `${frameBlock}\n\n${mintBundle.text}${ledgerBlock}${legendBlock}`;
+
 
     const config: any = {
       safetySettings: cleanSafetySettings,
@@ -138,7 +191,15 @@ ${globalMemoryContext ? `\n--- [ACTIVE QUANTUM MEMORY & AXIOMS] ---\n${globalMem
         if (textResponse) {
           return res.json({
             success: true,
-            thoughtProcess: `[NEXUS SERVER MATRIX]: Active Candidate (${candidate})\n[STATUS]: Gemini Engine Responded Successfully`,
+            thoughtProcess: [
+              `[NEXUS RUNTIME PLAN]: engine=${plan.engine}, model=${plan.model}`,
+              `[SKILL CLUSTER]: ${skillPlan.clusterLabel || 'none'} (${skillPlan.activeSkillIds.join(', ') || 'compact'})`,
+              `[DEPTH MODE]: ${plan.depthMode}`,
+              `[GOAL CONFIDENCE]: ${mintBundle.preflight?.goalConfidence || 'unopened'}`,
+              legend.enabled
+                ? `[LEGEND ENGINE]: ON (${legend.forgePlan.stageCount} stages, ${legend.forgePlan.candidates.length} paths, tokens=${legend.tokens})`
+                : `[LEGEND ENGINE]: OFF (${legend.reason})`
+            ].join('\n'),
             finalResponse: textResponse,
             groundingMetadata,
             actualModelUsed: `Gemini (${candidate})`

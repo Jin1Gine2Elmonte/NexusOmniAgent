@@ -11,6 +11,7 @@ import nexusForgeRouter from "./server_nexusForge.ts";
 import inklingModelRouter from "./server_inklingModel.ts";
 import kimiModelRouter from "./server_kimiModel.ts";
 import geminiModelRouter from "./server_geminiModel.ts";
+import agentBridgeRouter from "./server_agentBridge.ts";
 
 dotenv.config();
 
@@ -223,7 +224,7 @@ app.use(["/api/local-model", "/api/models/local"], localModelRouter);
 // Mount Agent OS Matrix Router
 app.use("/api/agent-os", agentOsRouter);
 
-// Mount Ideogram 4.0 Open-Source Tesseract Model Router
+// Mount Nexus Visual Engine Router (Gemini-driven)
 app.use(["/api/ideogram-model", "/api/models/ideogram"], ideogramModelRouter);
 
 // Mount Nexus Forge X Sovereign Genesis Router
@@ -237,6 +238,9 @@ app.use(["/api/kimi-model", "/api/models/kimi"], kimiModelRouter);
 
 // Mount Gemini Model Router
 app.use(["/api/gemini", "/api/models/gemini"], geminiModelRouter);
+
+// Mount Agent Bridge (two-way written notes between architect and executor)
+app.use("/api/bridge", agentBridgeRouter);
 
 // Forward music endpoint alias
 app.post("/api/models/music", (req, res, next) => {
@@ -368,7 +372,10 @@ async function startServer() {
   if (process.env.NODE_ENV !== "production") {
     const { createServer: createViteServer } = await import("vite");
     const vite = await createViteServer({
-      server: { middlewareMode: true },
+      server: {
+        middlewareMode: true,
+        allowedHosts: ['.e2b.app', '.localhost', 'localhost', '127.0.0.1'],
+      },
       appType: "spa",
     });
     app.use(vite.middlewares);

@@ -32,7 +32,7 @@ const cleanSafetySettings = [
   }
 ];
 
-// Helper to check if Kimi K3 is downloaded / injected
+// Helper to check if Kimi route is configured
 function getKimiConfig() {
   if (fs.existsSync(CONFIG_FILE)) {
     try {
@@ -50,10 +50,10 @@ router.get("/status", (req, res) => {
   if (config) {
     return res.json({
       downloaded: true,
-      modelName: config.model || "Kimi K3 (Moonshot Open-Source Architecture)",
+      modelName: config.model || "Nexus Kimi (Moonshot API)",
       version: config.version || "v3.0.0-OpenSource-Sovereign",
-      parameters: config.parameters || "Kimi K3 MoE Engine",
-      architecture: config.architecture || "Kimi-K3 Infinite Context MoE Transformer",
+      parameters: config.parameters || "User-configured Moonshot/Kimi model",
+      architecture: config.architecture || "User-configured Moonshot/Kimi chat model",
       capabilities: config.capabilities || [],
       status: "ACTIVE_INJECTED",
       injectedAt: config.downloadTimestamp
@@ -62,7 +62,7 @@ router.get("/status", (req, res) => {
 
   res.json({
     downloaded: false,
-    modelName: "Kimi K3 (Moonshot Open-Source Architecture)",
+    modelName: "Nexus Kimi (Moonshot API)",
     version: "v3.0.0-OpenSource",
     status: "NOT_DOWNLOADED"
   });
@@ -85,12 +85,12 @@ router.post("/download", (req, res) => {
   });
 });
 
-// Chat Endpoint for Kimi K3
+// Chat Endpoint for Nexus Kimi
 router.post("/chat", async (req, res) => {
   const { messages, temperature, apiKey: userApiKey, baseUrl: userBaseUrl, modelName: userModelName } = req.body;
 
   if (!messages || !Array.isArray(messages)) {
-    return res.status(400).json({ error: "Messages array is required for Kimi K3." });
+    return res.status(400).json({ error: "Messages array is required for Nexus Kimi." });
   }
 
   // Auto-ensure Kimi config exists
@@ -133,7 +133,7 @@ router.post("/chat", async (req, res) => {
         if (text) {
           return res.json({
             success: true,
-            model: `Kimi K3 (${kimiModel})`,
+            model: `Nexus Kimi ()`,
             choices: [{ message: { role: 'assistant', content: text } }]
           });
         }
@@ -149,8 +149,8 @@ router.post("/chat", async (req, res) => {
   // لا تزييف عند الفشل — إبلاغ صادق بالخطأ
   return res.status(503).json({
     success: false,
-    model: `Kimi K3 (${kimiModel})`,
-    error: "تعذّر الاتصال بنموذج Kimi K3 عبر Moonshot API. تحقق من إدخال مفتاح API صالح لـ Kimi أو Moonshot في الإعدادات أو متغيرات البيئة.",
+    model: `Nexus Kimi ()`,
+    error: "تعذّر الاتصال بنموذج Nexus Kimi عبر Moonshot API. تحقق من إدخال مفتاح API صالح لـ Kimi أو Moonshot في الإعدادات أو متغيرات البيئة.",
     errorCode: "KIMI_UPSTREAM_UNAVAILABLE"
   });
 });

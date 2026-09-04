@@ -9,6 +9,7 @@ export default defineConfig(({ mode }) => {
       server: {
         port: 3000,
         host: '0.0.0.0',
+        allowedHosts: ['.e2b.app', '.localhost', 'localhost', '127.0.0.1'],
       },
       plugins: [react(), tailwindcss()],
       define: {

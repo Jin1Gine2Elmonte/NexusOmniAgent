@@ -8,7 +8,7 @@ const router = express.Router();
 const MODEL_DIR = path.join(process.cwd(), ".nexus_ideogram_4.0");
 const CONFIG_FILE = path.join(MODEL_DIR, "config.json");
 
-// Helper to check if Ideogram 4.0 is downloaded
+// Helper to check if Nexus Visual Engine is downloaded
 function getIdeogramConfig() {
   if (fs.existsSync(CONFIG_FILE)) {
     try {
@@ -26,10 +26,10 @@ router.get("/status", (req, res) => {
   if (config) {
     return res.json({
       downloaded: true,
-      modelName: config.model || "Ideogram 4.0 Open-Source Tesseract Engine",
+      modelName: config.model || "Nexus Visual Engine (Gemini-driven)",
       version: config.version || "v4.0.0-Sovereign",
-      parameters: config.parameters || "12.4 Billion Parameters",
-      architecture: config.architecture || "Diffusion Tesseract Transformer with Advanced Typography Engine",
+      parameters: config.parameters || "Gemini-driven vector pipeline",
+      architecture: config.architecture || "Gemini text+vision vector directive",
       capabilities: config.capabilities || [],
       status: "ACTIVE_INJECTED",
       injectedAt: config.downloadTimestamp
@@ -38,9 +38,9 @@ router.get("/status", (req, res) => {
 
   res.json({
     downloaded: false,
-    modelName: "Ideogram 4.0 Open-Source Tesseract Engine",
+    modelName: "Nexus Visual Engine (Gemini-driven)",
     version: "v4.0.0",
-    parameters: "12.4 Billion Parameters",
+    parameters: "Gemini-driven vector pipeline",
     status: "NOT_DOWNLOADED"
   });
 });
@@ -62,24 +62,24 @@ router.post("/download", (req, res) => {
   });
 });
 
-// Image & Typography Synthesis Endpoint with Ideogram 4.0
+// Image & Typography Synthesis Endpoint with Nexus Visual Engine
 router.post("/generate", async (req, res) => {
   const { prompt, style, aspectRatio, typographyText } = req.body;
 
   if (!prompt) {
-    return res.status(400).json({ error: "Prompt is required for Ideogram 4.0 generation." });
+    return res.status(400).json({ error: "Prompt is required for Nexus Visual Engine generation." });
   }
 
-  const fullPrompt = typographyText 
-    ? `Ideogram 4.0 typography image rendering: "${prompt}". Render exact text lettering: "${typographyText}" in artistic ${style || 'modern typography'} style.`
-    : `Ideogram 4.0 high quality visual image rendering: "${prompt}", style: ${style || 'photorealistic typography & graphic design'}.`;
+  const fullPrompt = typographyText
+    ? `Nexus Visual Engine typography image rendering: "${prompt}". Render exact text lettering: "${typographyText}" in artistic ${style || 'modern typography'} style.`
+    : `Nexus Visual Engine high quality visual image rendering: "${prompt}", style: ${style || 'photorealistic typography & graphic design'}.`;
 
   try {
     const apiKey = process.env.GEMINI_API_KEY;
 
     if (apiKey) {
       const ai = new GoogleGenAI({ apiKey });
-      
+
       // Attempt image generation if supported or generate rich SVG/data response via Gemini
       const response = await ai.models.generateContent({
         model: "gemini-3.1-pro-preview",
@@ -87,7 +87,7 @@ router.post("/generate", async (req, res) => {
           {
             role: "user",
             parts: [{
-              text: `You are the Ideogram 4.0 Open-Source Tesseract Engine (12.4B Parameters). 
+              text: `You are the Nexus Visual Engine (Gemini-driven).
 Generate a high-fidelity SVG graphics rendering and detailed design metadata for the user's prompt:
 Prompt: "${prompt}"
 Typography text: "${typographyText || ''}"
@@ -114,7 +114,7 @@ Respond ONLY with a valid JSON object matching this schema:
           const parsed = JSON.parse(jsonMatch[0]);
           return res.json({
             success: true,
-            model: "Ideogram Typography Vector Engine (via Gemini)",
+            model: "Nexus Visual Engine (via Gemini)",
             result: parsed
           });
         } catch (e) {
@@ -125,15 +125,15 @@ Respond ONLY with a valid JSON object matching this schema:
 
     return res.status(503).json({
       success: false,
-      model: "Ideogram 4.0",
-      error: "توليد الصور والنصوص الطباعية عبر Ideogram غير مُفعَّل حالياً أو لم يتم ضبط مفتاح مزود الخدمة.",
+      model: "Nexus Visual Engine",
+      error: "توليد الصور والنصوص الطباعية عبر Nexus Visual Engine غير مُفعَّل حالياً أو لم يتم ضبط مفتاح مزود الخدمة.",
       errorCode: "IDEOGRAM_UNAVAILABLE"
     });
   } catch (err: any) {
-    console.error("Ideogram generation error:", err);
-    res.status(500).json({ 
+    console.error("Nexus Visual Engine generation error:", err);
+    res.status(500).json({
       success: false,
-      error: err?.message || "Ideogram 4.0 generation failed.",
+      error: err?.message || "Nexus Visual Engine generation failed.",
       errorCode: "IDEOGRAM_GENERATION_FAILED"
     });
   }

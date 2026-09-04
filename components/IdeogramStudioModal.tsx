@@ -60,7 +60,7 @@ export const IdeogramStudioModal: React.FC<IdeogramStudioModalProps> = ({ isOpen
       const res = await fetch('/api/ideogram-model/download', { method: 'POST' });
       const data = await res.json();
       if (data.success) {
-        setDownloadLog(prev => [...prev, `[${new Date().toLocaleTimeString()}] [SUCCESS]: Ideogram 4.0 Open-Source Tesseract Engine injected into NEXUS!`]);
+        setDownloadLog(prev => [...prev, `[${new Date().toLocaleTimeString()}] [SUCCESS]: Nexus Visual Engine (Gemini-driven) injected into NEXUS!`]);
         await fetchStatus();
       } else {
         setDownloadLog(prev => [...prev, `[${new Date().toLocaleTimeString()}] [ERROR]: ${data.error || 'Failed to download model.'}`]);
@@ -124,14 +124,14 @@ export const IdeogramStudioModal: React.FC<IdeogramStudioModalProps> = ({ isOpen
             <div>
               <div className="flex items-center gap-2">
                 <h2 className="text-purple-400 font-mono text-base uppercase tracking-widest font-bold">
-                  IDEOGRAM 4.0 TESSERACT STUDIO (OPEN-SOURCE ENGINE)
+                  NEXUS VISUAL STUDIO (GEMINI-DRIVEN)
                 </h2>
                 <span className="px-2 py-0.5 text-[9px] font-mono bg-purple-950/80 border border-purple-500/40 text-purple-300 rounded font-bold uppercase">
-                  12.4B PARAMETERS
+                  GEMINI VECTOR
                 </span>
               </div>
               <p className="text-xs text-zinc-400 font-mono mt-0.5">
-                محرك التوليد البصري والتايبوجرافي المحقون في عقل نيكسوس لتوليد التصاميم والخطوط فائقة الدقة
+                المحرك البصري المدمج في عقل نيكسوس لتوليد التصاميم والخطوط عبر مسار Gemini، دون ادّعاء معاملات محلية غير حقيقية
               </p>
             </div>
           </div>
@@ -154,7 +154,7 @@ export const IdeogramStudioModal: React.FC<IdeogramStudioModalProps> = ({ isOpen
               <div className="flex items-center justify-between">
                 <span className="text-xs font-mono font-bold text-zinc-200 flex items-center gap-2">
                   <Cpu size={15} className="text-purple-400" />
-                  حالة نموذج Ideogram 4.0 المحقون
+                  حالة توفر محرك Nexus Visual
                 </span>
                 {status?.downloaded ? (
                   <span className="text-[10px] font-mono px-2 py-0.5 bg-emerald-950 text-emerald-400 border border-emerald-500/30 rounded-full flex items-center gap-1">
@@ -169,10 +169,10 @@ export const IdeogramStudioModal: React.FC<IdeogramStudioModalProps> = ({ isOpen
               </div>
 
               <div className="text-xs font-mono text-zinc-400 space-y-1.5">
-                <p><strong className="text-zinc-200">اسم النموذج:</strong> {status?.modelName || 'Ideogram 4.0 Open-Source Tesseract'}</p>
+                <p><strong className="text-zinc-200">اسم النموذج:</strong> {status?.modelName || 'Nexus Visual Engine (Gemini-driven)'}</p>
                 <p><strong className="text-zinc-200">النسخة:</strong> {status?.version || 'v4.0.0-Sovereign'}</p>
-                <p><strong className="text-zinc-200">عدد المعلمات:</strong> <span className="text-purple-300 font-bold">{status?.parameters || '12.4 Billion Parameters'}</span></p>
-                <p><strong className="text-zinc-200">البنية:</strong> {status?.architecture || 'Diffusion Tesseract Transformer'}</p>
+                <p><strong className="text-zinc-200">عدد المعلمات:</strong> <span className="text-purple-300 font-bold">{status?.parameters || 'Gemini-driven vector pipeline'}</span></p>
+                <p><strong className="text-zinc-200">البنية:</strong> {status?.architecture || 'Gemini vector pipeline'}</p>
               </div>
 
               <button
@@ -181,7 +181,7 @@ export const IdeogramStudioModal: React.FC<IdeogramStudioModalProps> = ({ isOpen
                 className="w-full py-2 bg-purple-950/60 hover:bg-purple-900/80 border border-purple-500/40 text-purple-200 font-mono text-xs rounded-xl flex items-center justify-center gap-2 transition-colors disabled:opacity-50"
               >
                 {isDownloading ? <RefreshCw size={14} className="animate-spin" /> : <Download size={14} />}
-                إعادة تحميل وحقن نموذج Ideogram 4.0 عبر التيرمنال
+                إعادة تهيئة مسار Nexus Visual عبر التيرمنال
               </button>
             </div>
 
@@ -262,7 +262,7 @@ export const IdeogramStudioModal: React.FC<IdeogramStudioModalProps> = ({ isOpen
                 className="w-full py-3 bg-purple-600 hover:bg-purple-500 text-white font-mono font-bold text-xs rounded-xl flex items-center justify-center gap-2 transition-colors disabled:opacity-50 shadow-lg shadow-purple-950/50"
               >
                 {isGenerating ? <RefreshCw size={16} className="animate-spin" /> : <Zap size={16} />}
-                توليد بواسطة Ideogram 4.0 Tesseract Engine
+                توليد بواسطة Nexus Visual Engine
               </button>
             </div>
 
@@ -287,8 +287,8 @@ export const IdeogramStudioModal: React.FC<IdeogramStudioModalProps> = ({ isOpen
               {isGenerating ? (
                 <div className="flex flex-col items-center gap-3 text-purple-400 font-mono text-xs animate-pulse">
                   <RefreshCw size={32} className="animate-spin" />
-                  <span>Ideogram 4.0 Tesseract Diffusion Latent Synthesis in progress...</span>
-                  <span className="text-[10px] text-zinc-500">Processing 12.4B Parameters Typography Alignment</span>
+                  <span>Nexus Visual Engine vector synthesis in progress...</span>
+                  <span className="text-[10px] text-zinc-500">Building typography layout via Gemini directive</span>
                 </div>
               ) : generationResult ? (
                 <div className="w-full h-full flex flex-col space-y-3">
@@ -296,10 +296,10 @@ export const IdeogramStudioModal: React.FC<IdeogramStudioModalProps> = ({ isOpen
                   <div className="flex items-center justify-between text-xs font-mono border-b border-zinc-800 pb-2">
                     <span className="text-purple-300 font-bold flex items-center gap-2">
                       <CheckCircle2 size={15} className="text-emerald-400" />
-                      {generationResult.title || 'Ideogram 4.0 Render Result'}
+                      {generationResult.title || 'Nexus Visual Render Result'}
                     </span>
                     <span className="text-[10px] px-2 py-0.5 bg-purple-950 text-purple-300 rounded border border-purple-500/30">
-                      Ideogram 4.0 12.4B
+                      Nexus Visual
                     </span>
                   </div>
 
@@ -327,9 +327,9 @@ export const IdeogramStudioModal: React.FC<IdeogramStudioModalProps> = ({ isOpen
                 <div className="flex flex-col items-center justify-center text-center space-y-3 text-zinc-500 font-mono p-6">
                   <ImageIcon size={48} className="text-zinc-700" />
                   <div>
-                    <h4 className="text-xs font-bold text-zinc-400">Ideogram 4.0 Visual Canvas</h4>
+                    <h4 className="text-xs font-bold text-zinc-400">Nexus Visual Canvas</h4>
                     <p className="text-[11px] text-zinc-600 mt-1">
-                      أدخل النص والوصف اضغط على "توليد بواسطة Ideogram 4.0" لبدء تخليق الصورة
+                      أدخل النص والوصف ثم اضغط على "توليد بواسطة Nexus Visual Engine" لبدء التوليد
                     </p>
                   </div>
                 </div>
@@ -344,7 +344,7 @@ export const IdeogramStudioModal: React.FC<IdeogramStudioModalProps> = ({ isOpen
         <div className="p-3 bg-zinc-950 border-t border-zinc-800 flex items-center justify-between font-mono text-xs text-zinc-400">
           <div className="flex items-center gap-2">
             <span className="w-2 h-2 rounded-full bg-purple-400 animate-pulse" />
-            <span className="text-[11px]">Ideogram 4.0 Open-Source Tesseract Engine (12.4B Params) - Injected in NEXUS</span>
+            <span className="text-[11px]">Nexus Visual Engine (Gemini-driven) - Available in NEXUS</span>
           </div>
           <button
             onClick={onClose}
