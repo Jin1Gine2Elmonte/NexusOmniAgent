@@ -20,6 +20,11 @@
 5. **`App.tsx` لا يمرر `intentHint/explicitGoal`:** الخادم جاهز، لكن الواجهة لا ترسلهما، فـ Preflight يبقى `unopened` غالباً.
 6. **`node_modules` عرضة للفقد** وقد تسبب `tsc: not found`، لكنها الآن موجودة.
 
+> **تصويب لاحق (2026-09-05، Arena Agent):** البندان **4** و**5** أعلاه **مُصلَحان فعلاً** في الكود الحي — القائمة أعلاه سجل تاريخي:
+> - البند 4: `services/geminiService.ts` (~سطر 1480) — الـfallback يمرر الآن `systemInstruction: nexusFallbackInstruction` مع إلحاق `INTENT HINT / EXPLICIT GOAL` الحالية.
+> - البند 5: `App.tsx` (~سطور 1085–1113) — يشتق `derivedIntentHint/derivedExplicitGoal` ويمررهما إلى `generateOmniResponse` فتصيران في الـpayload.
+> **التحقق:** `npm run verify:runtime` → `ALL RUNTIME PATH CHECKS PASSED`؛ و`grep -n "nexusFallbackInstruction" services/geminiService.ts`؛ و`grep -n "derivedIntentHint" App.tsx`.
+
 ---
 
 ## ٢) الخطة (أولويات، قابلة للتنفيذ بدون كسر)
