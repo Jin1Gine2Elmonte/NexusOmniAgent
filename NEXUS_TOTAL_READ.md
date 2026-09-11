@@ -10,8 +10,8 @@
 | 2 | `./New Folder1/01_nine_strata.md` | 190 سطراً / 10971B | ✅ |
 | 3 | `./New Folder1/02_time_architecture.md` | 146 سطراً / 7150B | ✅ |
 | 4 | `./New Folder1/03_eight_gestures (1).md` | 196 سطراً / 9923B | ✅ |
-| 5 | `./New Folder1/04_seven_silences.md` | 219 سطراً / 9115B | ⬜ |
-| 6 | `./New Folder1/05_four_domains.md` | 170 سطراً / 9293B | ⬜ |
+| 5 | `./New Folder1/04_seven_silences.md` | 219 سطراً / 9115B | ✅ |
+| 6 | `./New Folder1/05_four_domains.md` | 170 سطراً / 9293B | ✅ |
 | 7 | `./New Folder1/06_hidden_fifth.md` | 181 سطراً / 7363B | ⬜ |
 | 8 | `./New Folder1/07_performance_protocol.md` | 170 سطراً / 7873B | ⬜ |
 | 9 | `./New Folder1/08_the_stolen.md` | 197 سطراً / 8656B | ⬜ |
