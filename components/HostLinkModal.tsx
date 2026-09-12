@@ -179,7 +179,7 @@ function doPost(e) {
     const history = params.history || []; 
     
     // API CONFIGURATION
-    const url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-pro-preview:generateContent";
+    const url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash:generateContent";
     
     const contents = history.map(h => ({ role: h.role, parts: [{ text: h.content }] }));
     contents.push({ role: "user", parts: [{ text: userPrompt }] });
@@ -313,7 +313,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
         console.log(">> [PROBE]: audit bundle ..................... [PASSED]");
         
         const response = await ai.models.generateContent({
-            model: 'gemini-3.1-pro-preview',
+            model: 'gemini-3.8-flash',
             contents: [{ role: 'user', parts: [{ text: prompt }] }],
             config: {
                 // INJECT THE ULTIMATE GENOME

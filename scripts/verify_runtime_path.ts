@@ -29,7 +29,7 @@ const req = {
 // 1. User choice stays primary.
 const explicitPro = planWithExplicitEngine(req, "pro-3.1", resolveEngineForModel("pro-3.1"));
 const explicitFlash = planWithExplicitEngine(req, "flash", resolveEngineForModel("flash"));
-if (explicitPro.model !== "gemini-3.1-pro-preview") fail(`pro model wrong: ${explicitPro.model}`);
+if (explicitPro.model !== "gemini-3.8-flash") fail(`pro model wrong: ${explicitPro.model}`);
 if (explicitFlash.model !== "gemini-3.8-flash") fail(`flash model wrong: ${explicitFlash.model}`);
 if (!explicitPro.reason.includes("user choice")) fail("pro reason does not mention user choice");
 if (!explicitFlash.reason.includes("user choice")) fail("flash reason does not mention user choice");

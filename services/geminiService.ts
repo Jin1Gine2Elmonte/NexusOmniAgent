@@ -492,7 +492,7 @@ export const generateOmniResponse = async (
     const candidateModels: string[] = [...new Set(
       [resolved.engine, ...resolved.candidates].filter((m): m is string => Boolean(m))
     )];
-    const modelToUse = resolved.engine || "gemini-3.1-pro-preview";
+    const modelToUse = resolved.engine || "gemini-3.8-flash";
 
     
     const formattedHistory = history.map((h: any) => {
@@ -581,7 +581,7 @@ export const extractEntitiesAndRelations = async (
   selectedModel: ModelSelection = 'pro-3.1'
 ): Promise<{ entities: any[]; relationships: any[] }> => {
   const ai = getAIClient();
-  const candidateModels = ['gemini-3.1-pro-preview', 'gemini-3.8-flash'];
+  const candidateModels = ['gemini-3.8-flash'];
 
   const extractionPrompt = `
   [SYSTEM: THE ARCHIVIST]
@@ -648,7 +648,7 @@ export const retrieveRelevantMemory = async (
     ${axiomsList}
   `;
 
-  const candidateModels = ['gemini-3.1-pro-preview', 'gemini-3.8-flash'];
+  const candidateModels = ['gemini-3.8-flash'];
   for (const model of candidateModels) {
     try {
       const response = await retryWithBackoff(() => ai.models.generateContent({
@@ -678,7 +678,7 @@ export const crystallizeSession = async (
   sessionId: string
 ): Promise<{ axioms: Axiom[], soulPrintUpdate?: Partial<import('../types').SoulPrint> }> => {
   const ai = getAIClient();
-  const candidateModels = ['gemini-3.1-pro-preview', 'gemini-3.8-flash'];
+  const candidateModels = ['gemini-3.8-flash'];
 
   const conversationText = sessionMessages
     .map((m) => `[${m.role.toUpperCase()}]: ${m.content || ''}`)
@@ -774,13 +774,13 @@ export const generateVisualArtifact = async (
     const ai = getAIClient();
     
     // Determine dynamic baseModel based on active selection (honest routing)
-    const baseModel = resolveEngineForModel(selectedModel).engine || 'gemini-3.1-pro-preview';
+    const baseModel = resolveEngineForModel(selectedModel).engine || 'gemini-3.8-flash';
 
     const stateInjection = nexusState ? `\n[NEXUS COGNITIVE STATE]:\n${nexusState}\n` : "";
 
     // Robust callWorker helper to try multiple models
     const callWorker = async (textPrompt: string, imgData?: string, mimeType?: string) => {
-        const candidates = Array.from(new Set([baseModel, 'gemini-3.1-pro-preview', 'gemini-3.8-flash']));
+        const candidates = Array.from(new Set([baseModel, 'gemini-3.8-flash']));
         let lastErr;
         for (const modelCandidate of candidates) {
             try {
