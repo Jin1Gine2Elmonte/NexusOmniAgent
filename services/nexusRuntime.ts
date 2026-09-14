@@ -1,23 +1,8 @@
 /**
- * NEXUS RUNTIME — موزّع التشغيل الذي يجعل نيكسوس بنية فوق كل نماذج جوجل.
+ * NEXUS RUNTIME — task-mode planner above provider engines.
  *
- * This layer intentionally treats Google's long-lived model family as a
- * swappable resource pool:
- *   PRO      -> deep reasoning / long-horizon synthesis
- *   FLASH    -> fast / wide / memory-light work
- *   AUDIO    -> TTS / voice briefing
- *   IMAGE    -> imagen visual generation
- *   MUSIC    -> lyria audio/music
- *
- * It does NOT replace `modelRouter` (which resolves an explicit UI selection).
- * It extends it: when the runtime is enabled it chooses the best engine for
- * the task, selects the right skill cluster, and yields an execution plan
- * that the existing minting pipeline can consume.
- *
- * Rules:
- *   - No Hermes, no observer.
- *   - No Arabic-regex intent guessing for semantic goals.
- *   - Engine selection is MODE selection, not identity selection.
+ * `pro` and `flash` are logical runtime modes. They may share a provider model
+ * while activating different depth, skill, and orchestration paths.
  */
 
 export type NexusEngine = 'pro' | 'flash' | 'audio' | 'image' | 'music';
@@ -34,14 +19,14 @@ export const NEXUS_ENGINE_CATALOG: Readonly<Record<NexusEngine, NexusEngineDeplo
   pro: {
     engine: 'pro',
     model: 'gemini-3.8-flash',
-    capability: 'deep reasoning, synthesis, long-horizon',
-    cost: 'high',
+    capability: 'deep runtime planning and synthesis on the configured Gemini backend',
+    cost: 'medium',
     bestFor: ['deep', 'philosophical', 'complex', 'analysis', 'synthesis']
   },
   flash: {
     engine: 'flash',
     model: 'gemini-3.8-flash',
-    capability: 'fast, broad, memory-light',
+    capability: 'direct, fast runtime path on the configured Gemini backend',
     cost: 'low',
     bestFor: ['fast', 'editing', 'summarize', 'memory', 'default']
   },
@@ -87,22 +72,15 @@ export interface NexusTaskPlan {
   steps: string[];
 }
 
-const attachmentMimeHints = (attachments?: { mimeType?: string }[]): string => {
-  const mimes = (attachments ?? []).map(a => (a?.mimeType || '').toLowerCase()).filter(Boolean);
-  return mimes.join(' ');
-};
+const attachmentMimeHints = (attachments?: { mimeType?: string }[]): string =>
+  (attachments ?? []).map(a => (a?.mimeType || '').toLowerCase()).filter(Boolean).join(' ');
 
-/**
- * MODE selection, not intent semantics. Exact modality signals only:
- * attachment mime -> audio/image/music; otherwise depth hint/goal -> pro/flash.
- */
 export const planNexusTask = (req: NexusTaskRequest): NexusTaskPlan => {
   const surface = (req.surface || '').toLowerCase();
   const goal = (req.explicitGoal || '').toLowerCase();
   const hint = (req.intentHint || '').toLowerCase();
   const mimes = attachmentMimeHints(req.attachments).toLowerCase();
 
-  // Exact modality signals from attachments.
   if (mimes.includes('audio/') || mimes.includes('video/') || surface.includes('briefing')) {
     return plan('audio', 'voice briefing', req);
   }
@@ -113,7 +91,6 @@ export const planNexusTask = (req: NexusTaskRequest): NexusTaskPlan => {
     return plan('music', 'music synthesis', req);
   }
 
-  // Otherwise depth-mode selection, not semantic guessing.
   const wantsDeep = req.prefersDeep
     || goal.includes('deep')
     || goal.includes('synthesis')
@@ -122,13 +99,13 @@ export const planNexusTask = (req: NexusTaskRequest): NexusTaskPlan => {
     || hint.includes('reasoning')
     || hint.includes('philosophical');
 
-  return plan(wantsDeep ? 'pro' : 'flash', wantsDeep ? 'deep reasoning' : 'default fast route', req);
+  return plan(wantsDeep ? 'pro' : 'flash', wantsDeep ? 'deep runtime route' : 'direct runtime route', req);
 };
 
 const plan = (
   engine: NexusEngine,
   reason: string,
-  req: NexusTaskRequest
+  _req: NexusTaskRequest
 ): NexusTaskPlan => {
   const dep = NEXUS_ENGINE_CATALOG[engine];
   const depthMode: NexusTaskPlan['depthMode'] = engine === 'pro' ? 'sovereign' : 'surface';
@@ -153,33 +130,31 @@ const plan = (
   };
 };
 
-/** User selection stays primary. Runtime only fills dedicated modalities or
- *  a fallback when the explicit id does not map to a real engine. */
+const DEEP_SELECTIONS = new Set(['pro-3.1', 'pro', 'inkling']);
+
+/**
+ * User selection remains primary. Provider resolution and runtime mode are
+ * separate: a legacy deep-mode id can share the provider backend with Flash
+ * while still selecting the sovereign planning and skill path.
+ */
 export const planWithExplicitEngine = (
   req: NexusTaskRequest,
   selectedModel: string,
   explicit: { engine: string; candidates: string[] }
 ): NexusTaskPlan => {
-  const base = planNexusTask(req);
+  if (!explicit.engine) return planNexusTask(req);
 
-  // Honored user choice: explicit id routes to a real engine (pro/flash/music).
-  if (explicit.engine) {
-    const engine: NexusEngine = explicit.engine.includes('lyria')
-      ? 'music'
-      : explicit.engine.includes('pro')
-        ? 'pro'
-        : 'flash';
-    return {
-      ...base,
-      engine,
-      model: explicit.engine,
-      candidates: Array.from(new Set([explicit.engine, ...explicit.candidates])).filter(Boolean).length
-        ? Array.from(new Set([explicit.engine, ...explicit.candidates]))
-        : base.candidates,
-      reason: `user choice "${selectedModel}" honored as primary engine`
-    };
-  }
+  const runtimeMode: NexusEngine = explicit.engine.includes('lyria')
+    ? 'music'
+    : DEEP_SELECTIONS.has(selectedModel)
+      ? 'pro'
+      : 'flash';
+  const selectedPlan = plan(runtimeMode, `user selected ${runtimeMode} runtime mode`, req);
+  const candidates = Array.from(new Set([explicit.engine, ...explicit.candidates])).filter(Boolean);
 
-  // No real engine id: runtime decides by modality (image/audio/music) or depth.
-  return base;
+  return {
+    ...selectedPlan,
+    model: explicit.engine,
+    candidates: candidates.length ? candidates : selectedPlan.candidates
+  };
 };
