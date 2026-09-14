@@ -82,7 +82,7 @@ router.post("/generate", async (req, res) => {
 
       // Attempt image generation if supported or generate rich SVG/data response via Gemini
       const response = await ai.models.generateContent({
-        model: "gemini-3.1-pro-preview",
+        model: "gemini-3.8-flash",
         contents: [
           {
             role: "user",
