@@ -1,11 +1,10 @@
 /**
  * NEXUS RUNTIME PATH SMOKE TEST
- * No API key required. Verifies the deterministic path:
- *   intent/goal -> planWithExplicitEngine -> skill cluster -> mint bundle ->
- *   preflight envelope -> entity frame -> ledger outcome.
+ * No API key required. Verifies deterministic routing, skill activation,
+ * minting, entity framing, and ledger lifecycle.
  */
 
-import { planWithExplicitEngine, planNexusTask } from "../services/nexusRuntime";
+import { planWithExplicitEngine } from "../services/nexusRuntime";
 import { resolveEngineForModel } from "../services/modelRouter";
 import { resolveSkillCluster, createSkillLedger, formatSkillLedgerForCall, recordSkillOutcome } from "../services/skillRuntime";
 import { buildMintBundle, auditMintBundle, DEFAULT_MINT_BUDGET } from "../services/minting";
@@ -26,20 +25,24 @@ const req = {
   prefersDeep: true
 };
 
-// 1. User choice stays primary.
+// 1. Provider model and logical runtime mode are separate contracts.
 const explicitPro = planWithExplicitEngine(req, "pro-3.1", resolveEngineForModel("pro-3.1"));
 const explicitFlash = planWithExplicitEngine(req, "flash", resolveEngineForModel("flash"));
-if (explicitPro.model !== "gemini-3.8-flash") fail(`pro model wrong: ${explicitPro.model}`);
-if (explicitFlash.model !== "gemini-3.8-flash") fail(`flash model wrong: ${explicitFlash.model}`);
-if (!explicitPro.reason.includes("user choice")) fail("pro reason does not mention user choice");
-if (!explicitFlash.reason.includes("user choice")) fail("flash reason does not mention user choice");
-ok("User explicit model choice stays primary (pro + flash).");
+if (explicitPro.model !== "gemini-3.8-flash") fail(`deep-mode provider wrong: ${explicitPro.model}`);
+if (explicitFlash.model !== "gemini-3.8-flash") fail(`flash provider wrong: ${explicitFlash.model}`);
+if (explicitPro.engine !== "pro") fail(`deep runtime mode wrong: ${explicitPro.engine}`);
+if (explicitFlash.engine !== "flash") fail(`direct runtime mode wrong: ${explicitFlash.engine}`);
+if (explicitPro.depthMode !== "sovereign") fail(`deep depthMode wrong: ${explicitPro.depthMode}`);
+if (explicitFlash.depthMode !== "surface") fail(`flash depthMode wrong: ${explicitFlash.depthMode}`);
+if (explicitPro.skillIntent !== "analytic-depth") fail(`deep skillIntent wrong: ${explicitPro.skillIntent}`);
+if (explicitFlash.skillIntent !== "perceptual-reading") fail(`flash skillIntent wrong: ${explicitFlash.skillIntent}`);
+ok("Provider routing and runtime modes remain distinct.");
 
-// 2. Runtime decision when no real explicit engine id.
+// 2. Runtime decision when no remote explicit engine id.
 const local = planWithExplicitEngine(req, "kimi-k3", resolveEngineForModel("kimi-k3"));
 if (local.engine !== "pro") fail(`local fallback engine wrong: ${local.engine}`);
 if (local.skillIntent !== "analytic-depth") fail(`fallback skillIntent wrong: ${local.skillIntent}`);
-ok("Runtime fallback without a real engine id chooses depth correctly.");
+ok("Runtime fallback without a remote engine chooses depth correctly.");
 
 // 3. Skill cluster activation.
 const skillPlan = resolveSkillCluster(explicitPro.skillIntent);
@@ -49,7 +52,7 @@ ok(`Skill cluster activated: ${skillPlan.clusterLabel} (${skillPlan.activeSkillI
 
 // 4. Ledger lifecycle.
 let ledger = createSkillLedger(skillPlan.activeSkillIds[0]);
-ledger = recordSkillOutcome(ledger, "success", "preflight worked; user choice honored");
+ledger = recordSkillOutcome(ledger, "success", "preflight worked; deep runtime mode retained");
 const ledgerBlock = formatSkillLedgerForCall(ledger);
 if (!ledgerBlock.includes("USAGE: 1")) fail("ledger not recording outcome");
 if (!ledgerBlock.includes("SUCCESS: 1")) fail("ledger success not recorded");
@@ -71,7 +74,7 @@ const bundle = buildMintBundle({
   memory: {
     soulPrint: entity.identityAnchor,
     globalMemoryContext: "NEXUS review + execution in progress.",
-    axioms: ["المستخدم صاحب القرار النهائي في اختيار النموذج."],
+    axioms: ["المستخدم صاحب القرار النهائي في اختيار وضع التشغيل."],
     paleArchive: ["entity-frame", "skill-runtime", "bounded-orchestration"]
   },
   preflight: {
@@ -83,7 +86,8 @@ const bundle = buildMintBundle({
     runtimeLaws: [
       `MINT MODE: ${skillPlan.mode}`,
       `ACTIVE CLUSTER: ${skillPlan.clusterLabel}`,
-      `MODEL (user-primary): ${explicitPro.model}`
+      `RUNTIME MODE: ${explicitPro.engine}`,
+      `PROVIDER MODEL: ${explicitPro.model}`
     ]
   }
 });

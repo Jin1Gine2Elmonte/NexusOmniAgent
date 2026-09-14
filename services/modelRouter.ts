@@ -1,38 +1,32 @@
 /**
- * NEXUS MODEL ROUTER — honest engine resolution.
+ * NEXUS MODEL ROUTER
  *
- * There is no "forced upgrade" remapping here: a `flash` selection maps to the
- * real flash engine, `pro` maps to the real pro engine. Weak/dead aliases that
- * are still passed by an untrusted caller map to their true engine so the
- * router never lies about `actualModelUsed`.
+ * This module resolves the provider model only. Runtime depth is selected in
+ * nexusRuntime, so two UI modes may intentionally share one provider model
+ * while activating different planning and skill paths.
  *
- * Dedicated local/visual/music engines return `engine: ""` — they are handled
- * by their own endpoints, not by the Gemini text router.
+ * Dedicated local/visual/music engines return their own route or an empty
+ * engine when handled by another endpoint.
  */
 export const resolveEngineForModel = (
   selectedModel: string
 ): { engine: string; candidates: string[]; aliases: string[] } => {
-  const PRO = "gemini-3.8-flash";
-  const FLASH = "gemini-3.8-flash";
+  const GEMINI_TEXT = "gemini-3.8-flash";
 
   switch (selectedModel) {
     case "pro-3.1":
     case "pro":
     case "inkling":
-      return { engine: PRO, candidates: [PRO, FLASH], aliases: [] };
+      return { engine: GEMINI_TEXT, candidates: [GEMINI_TEXT], aliases: [] };
     case "flash":
-      return { engine: FLASH, candidates: [FLASH, PRO], aliases: [] };
+      return { engine: GEMINI_TEXT, candidates: [GEMINI_TEXT], aliases: [] };
     case "flash-3.7":
     case "flash-3.6":
     case "flash-3.5":
-      // Deprecated remote IDs that no longer exist. Route to the real flash
-      // engine (not a fake "upgrade"), and expose the alias so callers can
-      // display the true engine if they want.
-      return { engine: FLASH, candidates: [FLASH, PRO], aliases: [selectedModel] };
+      return { engine: GEMINI_TEXT, candidates: [GEMINI_TEXT], aliases: [selectedModel] };
     case "lyria-3-pro":
       return { engine: "lyria-3-pro-preview", candidates: ["lyria-3-pro-preview"], aliases: [] };
     default:
-      // Dedicated local/visual/music endpoints are not Gemini text engines.
       return { engine: "", candidates: [], aliases: [] };
   }
 };
