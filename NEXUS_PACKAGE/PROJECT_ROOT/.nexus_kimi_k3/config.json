@@ -1,0 +1,14 @@
+{
+  "model": "moonshotai/kimi-k3-openweights",
+  "version": "v3.0.0-OpenWeights-Sovereign",
+  "downloadTimestamp": "2026-07-28T19:48:36.022Z",
+  "architecture": "Kimi K3 Infinite Context MoE Transformer (Open Weights)",
+  "parameters": "Moonshot Kimi K3 MoE Engine",
+  "capabilities": [
+    "Infinite Context Horizon & Deep Logic Mapping",
+    "Multilingual Polymath Mastery (Arabic, English, Chinese)",
+    "Structured Exhaustive Reasoning & Edge Case Analysis",
+    "Open-Source High-Speed Injected Engine"
+  ],
+  "status": "Downloaded & Injected into NEXUS Core Bus"
+}

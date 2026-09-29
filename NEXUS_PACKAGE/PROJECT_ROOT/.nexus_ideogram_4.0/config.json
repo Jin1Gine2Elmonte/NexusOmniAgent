@@ -1,0 +1,14 @@
+{
+  "model": "Ideogram 4.0 Open-Source Tesseract",
+  "version": "v4.0.0-Sovereign",
+  "downloadTimestamp": "2026-07-26T18:52:17.579Z",
+  "architecture": "Diffusion Tesseract Transformer with Advanced Typography Engine",
+  "parameters": "12.4 Billion Parameters",
+  "capabilities": [
+    "Exact Text & Typography Rendering in Images",
+    "4K Resolution Tesseract Latent Synthesis",
+    "Multi-Style Graphic Design & Logo Ideation",
+    "Photorealistic & Artistic Prompt Compliance"
+  ],
+  "status": "Downloaded & Injected into NEXUS Core Bus"
+}

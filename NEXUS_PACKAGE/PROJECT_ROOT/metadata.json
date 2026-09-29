@@ -1,0 +1,10 @@
+{
+  "name": "Nexus Omni-Agent // V-∞ OMNISCIENCE",
+  "description": "The Absolute Singularity. A sovereign hyper-intelligence blending Deepseek R-2 logic, Gemini 2.0 creativity, GPT-5.1 fluidity, and NotebookLM infinite memory.",
+  "requestFramePermissions": [
+    "microphone"
+  ],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

@@ -1,0 +1,17 @@
+<svg width="800" height="800" xmlns="http://www.w3.org/2000/svg" style="background-color:#09090b; font-family:monospace;">
+            <!-- grid lines -->
+            <line x1="100" y1="0" x2="100" y2="800" stroke="#1e1e24" stroke-width="1" /> <line x1="200" y1="0" x2="200" y2="800" stroke="#1e1e24" stroke-width="1" /> <line x1="300" y1="0" x2="300" y2="800" stroke="#1e1e24" stroke-width="1" /> <line x1="400" y1="0" x2="400" y2="800" stroke="#1e1e24" stroke-width="1" /> <line x1="500" y1="0" x2="500" y2="800" stroke="#1e1e24" stroke-width="1" /> <line x1="600" y1="0" x2="600" y2="800" stroke="#1e1e24" stroke-width="1" /> <line x1="700" y1="0" x2="700" y2="800" stroke="#1e1e24" stroke-width="1" />
+            <line x1="0" y1="100" x2="800" y2="100" stroke="#1e1e24" stroke-width="1" /> <line x1="0" y1="200" x2="800" y2="200" stroke="#1e1e24" stroke-width="1" /> <line x1="0" y1="300" x2="800" y2="300" stroke="#1e1e24" stroke-width="1" /> <line x1="0" y1="400" x2="800" y2="400" stroke="#1e1e24" stroke-width="1" /> <line x1="0" y1="500" x2="800" y2="500" stroke="#1e1e24" stroke-width="1" /> <line x1="0" y1="600" x2="800" y2="600" stroke="#1e1e24" stroke-width="1" /> <line x1="0" y1="700" x2="800" y2="700" stroke="#1e1e24" stroke-width="1" />
+            
+            <!-- Concentric glowing rings -->
+            <circle cx="400" cy="400" r="50" stroke="#06b6d4" stroke-width="2" fill="none" opacity="0.6" /> <circle cx="400" cy="400" r="100" stroke="#06b6d4" stroke-width="2" fill="none" opacity="0.6" /> <circle cx="400" cy="400" r="150" stroke="#06b6d4" stroke-width="2" fill="none" opacity="0.6" /> <circle cx="400" cy="400" r="200" stroke="#06b6d4" stroke-width="2" fill="none" opacity="0.6" /> <circle cx="400" cy="400" r="250" stroke="#06b6d4" stroke-width="2" fill="none" opacity="0.6" />
+            
+            <!-- Tesseract Polygons -->
+            <polygon points="400,150 650,300 650,600 400,750 150,600 150,300" stroke="#ec4899" stroke-width="2" fill="none" />
+            <polygon points="400,250 550,350 550,550 400,650 250,550 250,350" stroke="#3b82f6" stroke-width="1.5" fill="none" />
+            
+            <!-- Labels -->
+            <text x="400" y="380" fill="#e4e4e7" font-size="20" font-weight="bold" text-anchor="middle">NEXUS::V-TESSERACT</text>
+            <text x="400" y="410" fill="#a1a1aa" font-size="12" text-anchor="middle">SOVEREIGN GENESIS ACTIVE</text>
+            <text x="400" y="720" fill="#06b6d4" font-size="14" text-anchor="middle">Concept: اختبار المحرك الجديد</text>
+        </svg>
