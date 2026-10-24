@@ -167,7 +167,7 @@ router.post("/execute", async (req, res) => {
     }
 
     const ai = new GoogleGenAI({ apiKey });
-    const candidateModels = ['gemini-3.1-pro-preview', 'gemini-3.8-flash'];
+    const candidateModels = ['gemini-3.8-flash'];
 
     const mintedCore = buildMintBundle({
       mode: "compact",
@@ -278,7 +278,7 @@ router.post("/synthesize", async (req, res) => {
     }
 
     const ai = new GoogleGenAI({ apiKey });
-    const candidateModels = ['gemini-3.1-pro-preview', 'gemini-3.8-flash'];
+    const candidateModels = ['gemini-3.8-flash'];
 
     const generateWithFallback = async (core: AgentCoreInfo) => {
       const mintedCore = buildMintBundle({

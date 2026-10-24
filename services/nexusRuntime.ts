@@ -33,7 +33,7 @@ export interface NexusEngineDeployment {
 export const NEXUS_ENGINE_CATALOG: Readonly<Record<NexusEngine, NexusEngineDeployment>> = {
   pro: {
     engine: 'pro',
-    model: 'gemini-3.1-pro-preview',
+    model: 'gemini-3.8-flash',
     capability: 'deep reasoning, synthesis, long-horizon',
     cost: 'high',
     bestFor: ['deep', 'philosophical', 'complex', 'analysis', 'synthesis']

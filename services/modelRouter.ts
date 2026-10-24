@@ -12,7 +12,7 @@
 export const resolveEngineForModel = (
   selectedModel: string
 ): { engine: string; candidates: string[]; aliases: string[] } => {
-  const PRO = "gemini-3.1-pro-preview";
+  const PRO = "gemini-3.8-flash";
   const FLASH = "gemini-3.8-flash";
 
   switch (selectedModel) {

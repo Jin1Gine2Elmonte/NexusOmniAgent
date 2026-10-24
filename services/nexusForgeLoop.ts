@@ -172,7 +172,7 @@ export const runOnePass = (input: ForgeInput): ForgePlan => {
   return {
     mode: "one-pass",
     engine: input.depthMode === "deep" || input.depthMode === "sovereign" ? "pro" : "flash",
-    model: input.selectedModel || (input.depthMode === "deep" ? "gemini-3.1-pro-preview" : "gemini-3.8-flash"),
+    model: input.selectedModel || (input.depthMode === "deep" ? "gemini-3.8-flash" : "gemini-3.8-flash"),
     depth: fold.vector.depth,
     breadth: 1,
     stageCount: 1,
@@ -199,7 +199,7 @@ export const runForgeLoop = (input: ForgeInput): ForgePlan => {
   return {
     mode: "forge",
     engine: input.depthMode === "deep" || input.depthMode === "sovereign" ? "pro" : "flash",
-    model: input.selectedModel || (input.depthMode === "deep" ? "gemini-3.1-pro-preview" : "gemini-3.8-flash"),
+    model: input.selectedModel || (input.depthMode === "deep" ? "gemini-3.8-flash" : "gemini-3.8-flash"),
     depth: foldFrame.vector.depth,
     breadth: foldFrame.vector.breadth,
     stageCount: 3,

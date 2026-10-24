@@ -66,8 +66,8 @@ router.post("/chat", async (req, res) => {
       selectedModel,
       resolved
     );
-    const modelName = plan.model || resolved.engine || "gemini-3.1-pro-preview";
-    const uniqueCandidates = Array.from(new Set(plan.candidates.length ? plan.candidates : [modelName, "gemini-3.1-pro-preview", "gemini-3.8-flash"]));
+    const modelName = plan.model || resolved.engine || "gemini-3.8-flash";
+    const uniqueCandidates = Array.from(new Set(plan.candidates.length ? plan.candidates : [modelName, "gemini-3.8-flash"]));
 
     const formattedHistory = history.map((h: any) => ({
       role: h.role === "user" ? "user" : "model",
@@ -251,7 +251,7 @@ router.post("/generate-image", async (req, res) => {
 
     const ai = new GoogleGenAI({ apiKey });
     const response = await ai.models.generateContent({
-      model: "gemini-3.1-pro-preview",
+      model: "gemini-3.8-flash",
       contents: [{
         role: "user",
         parts: [{
@@ -314,7 +314,7 @@ router.post("/generate-music", async (req, res) => {
       try {
         const ai = new GoogleGenAI({ apiKey });
         const textResponse = await ai.models.generateContent({
-          model: "gemini-3.1-pro-preview",
+          model: "gemini-3.8-flash",
           contents: [{
             role: "user",
             parts: [{
